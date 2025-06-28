@@ -9,6 +9,7 @@ Adds Requester and Provider for Space Platform in order to building a fully auto
 ## Usage
 
 ### Definition Logistics Platform Network (LPN)
+### Definition Logistics Platform Network (LPN)
 
 ![](graphics/utility/tat-title.png)
 
@@ -31,11 +32,11 @@ LPN works with channel.\
 Each channel works individualy. By default the "DEFAULT" channel is created.\
 A new channel can be created in LPN Provider/LPN Requester/Space Platform GUI.\
 By default new LPN Provider/LPN Requester/Space Platform are assign to the "DEFAULT" channel.\
-You can assign a new channel in their GUI.
+You can assign a new channel in their GUI.\
 1. The current channel.
 2. Select and set entity on new channel.
 3. Create a new channel.
-
+\
 ### AUTO-SCHEDULE
 
 ![](graphics/utility/tat-schedule.png)
@@ -45,7 +46,7 @@ A custom section with the format "LPN : Platform n° :" is created and contains 
 Wait conditions at LPN Provider station :
 - Unloading enabled(so be careful)
 - All requests satisfied
-- Green-Signal = 1 (so you can make some circuitry if you want)\
+- Green-Signal = 1 (so you can make some circuitry if you want)
 \
 Wait conditions at LPN Requester station :
 - Unloading enabled(of course)
