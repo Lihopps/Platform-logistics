@@ -9,7 +9,6 @@ Adds Requester and Provider for Space Platform in order to building a fully auto
 ## Usage
 
 ### Definition Logistics Platform Network (LPN)
-### Definition Logistics Platform Network (LPN)
 
 ![](graphics/utility/tat-title.png)
 
