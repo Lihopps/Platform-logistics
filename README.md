@@ -45,7 +45,7 @@ A custom section with the format "LPN : Platform n° :" is created and contains 
 Wait conditions at LPN Provider station :
 - Unloading enabled(so be careful)
 - All requests satisfied
-- Green-Signal = 1 (so you can make some circuitry if you want)\
+- Green-Signal = 1 (so you can make some circuitry if you want)
 
 Wait conditions at LPN Requester station :
 - Unloading enabled(of course)
