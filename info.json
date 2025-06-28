@@ -3,12 +3,19 @@
     "version": "0.0.1",
     "title": "Platform-logistics",
     "author": "lihop",
-    "contact": "lihops.game@gmail.com",
-    "homepage": "",
+    "contact": "https://github.com/Lihopps/Platform_logistics",
+    "homepage": "https://github.com/Lihopps/Platform_logistics",
     "factorio_version": "2.0",
     "dependencies": [
 	"base >=2.0.0",
     "space-age>=2.0.0",
     "flib>=0.16.2"],
-    "description": "tmtcxs"
+    "description": "Adds Requester and Provider for Space Platform in order to building a fully automated,Space Platform logistic network.",
+    "package": {
+        "no_portal_upload": true,
+        "git_publish_branch": "main"
+
+    }
+
+
 }
