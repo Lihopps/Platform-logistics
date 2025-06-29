@@ -50,7 +50,7 @@ data:extend({
     {
     type = "custom-input",
     name = "toggle-LPN-MANAGER",
-    key_sequence = "Z",
+    key_sequence = ";",
     consuming = "game-only",
     action = "lua"
   },

@@ -317,7 +317,7 @@ local function update_general_flow(general_flow)
                                 {
                                     type = "label",
                                     style_mods = { left_padding = 5, top_margin = 3 },
-                                    caption = {"","[planet=" .. planet.name .. "] ",{"gui.req-num",number}},
+                                    caption = {"","[planet=" .. planet.name .. "] ",{"gui.req-num"}," ",number},
                                     tooltip = "[planet=" .. planet.name .. "]" .. planet.name
                                 },
                                 {
@@ -366,7 +366,7 @@ local function update_general_flow(general_flow)
                                 {
                                     type = "label",
                                     style_mods = { left_padding = 5, top_margin = 3 },
-                                    caption = {"","[planet=" .. planet.name .. "] ",{"gui.prov-num",number}},
+                                    caption = {"","[planet=" .. planet.name .. "] ",{"gui.prov-num"}," ",number},
                                     tooltip = "[planet=" .. planet.name .. "]" .. planet.name
                                 },
                                 {
@@ -623,6 +623,7 @@ end
 commands.add_command("lpn_rebuild", nil,
     function(command)
         LPN_gui_manager.rebuild()
+        game.print("LPN GUI MANAGER REBUILT")
     end)
 
 function LPN_gui_manager.update_general_flow(player)

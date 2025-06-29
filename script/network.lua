@@ -323,6 +323,23 @@ function network_class.add_request(network, entity_number, item, quantity, quali
                 local hub_inventory = hub.get_inventory(defines.inventory.hub_main)
                 if hub_inventory then
                     local platform_quantity = hub_inventory.get_item_count({ name = item, quality = quality })
+                    
+                    --on enleve la qty qu'il y a dans les request
+                    local sections = hub.get_logistic_sections()
+                    local total_request=0
+                    if sections then
+                        for _,section in pairs(sections.sections) do
+                            for _,filter in pairs(section.filters) do
+                                if filter.value then
+                                    if filter.value.name==item and filter.value.quality==quality then
+                                        total_request=total_request+(filter.min or 0)
+                                    end
+                                end
+                            end
+                        end
+                    end
+                    platform_quantity=platform_quantity-total_request
+
                     if platform_quantity > 0 then
                         en_stock = 1
                     end
@@ -384,6 +401,7 @@ function network_class.add_request(network, entity_number, item, quantity, quali
         --game.print("passer par la")
     end
 
+    
     for i, plats in ipairs(platforms_registered) do
         for j = #plats, 1, -1 do
             if quantity <= 0 or provider.stock < rocket_rounded(item, 1) then return end
