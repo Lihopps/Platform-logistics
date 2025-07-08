@@ -1,3 +1,4 @@
+local migrations = require("script.migrations")
 local network=require("script.network")
 local LPN_gui_manager=require("script.LPN_gui_manager")
 
@@ -11,7 +12,9 @@ function main.on_init()
 end
 
 function main.on_configuration_changed(e)
+    migrations.on_configuration_changed(e)
     LPN_gui_manager.rebuild()
+
 end
 
 main.events={

@@ -1,7 +1,14 @@
 ---------------------------------------------------------------------------------------------------
 Version: 1.0.2
 Date: ????
+  Features:
+    - Add setting for let free minimum slot in space plaform in order to not stop them [#3]
   Changes:
+    - Add migration support for newer version
+  Bugfixes:
+    - Bug where provider/requester not change channel in their internal settings [#1]
+  Locale:
+    - Change name in settings (misspelled)
 ---------------------------------------------------------------------------------------------------
 Version: 1.0.1
 Date: 2025-06-29

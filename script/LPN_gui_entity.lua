@@ -76,34 +76,40 @@ local function on_set_channel_clicked(e,chan)
         elseif entity.name == "ptflog-requester" then
             if channel=="NONE" then
                 storage.ptflogchannel[e.element.tags["current_channel"]].building["ptflog-requester"][key] = nil
+                e.element.tags["current_channel"]="NONE"
                 storage.ptflogtracker[key] = nil
             
             elseif e.element.tags["current_channel"]=="NONE" then
-                storage.ptflogchannel[e.element.tags["current_channel"]].building["ptflog-requester"][key]={
+                storage.ptflogchannel[channel].building["ptflog-requester"][key]={
                     incomming={}
                 }
                 storage.ptflogtracker[key] = channel
+                e.element.tags["current_channel"]=channel
             
             else
+                storage.ptflogchannel[channel].building["ptflog-requester"][key]=storage.ptflogchannel[e.element.tags["current_channel"]].building["ptflog-requester"][key]
                 storage.ptflogchannel[e.element.tags["current_channel"]].building["ptflog-requester"][key] = nil
-                storage.ptflogchannel[e.element.tags["current_channel"]].building["ptflog-requester"][key]=storage.ptflogchannel[channel].building["ptflog-provider"][key]
                 storage.ptflogtracker[key] = channel
+                e.element.tags["current_channel"]=channel
             end
         elseif entity.name == "ptflog-provider" then
             if channel=="NONE" then
                 storage.ptflogchannel[e.element.tags["current_channel"]].building["ptflog-provider"][key] = nil
                 storage.ptflogtracker[key] = nil
+                e.element.tags["current_channel"]="NONE"
             
             elseif e.element.tags["current_channel"]=="NONE" then
-                storage.ptflogchannel[e.element.tags["current_channel"]].building["ptflog-provider"][key]={
+                storage.ptflogchannel[channel].building["ptflog-provider"][key]={
                     incomming={}
                 }
                 storage.ptflogtracker[key] = channel
+                e.element.tags["current_channel"]=channel
             
             else
+                storage.ptflogchannel[channel].building["ptflog-provider"][key]=storage.ptflogchannel[e.element.tags["current_channel"]].building["ptflog-provider"][key]
                 storage.ptflogchannel[e.element.tags["current_channel"]].building["ptflog-provider"][key] = nil
-                storage.ptflogchannel[e.element.tags["current_channel"]].building["ptflog-provider"][key]=storage.ptflogchannel[channel].building["ptflog-provider"][key]
                 storage.ptflogtracker[key] = channel
+                e.element.tags["current_channel"]=channel
             end
         end
         if not chan then
