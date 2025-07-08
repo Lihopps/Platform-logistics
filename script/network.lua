@@ -3,8 +3,8 @@ local util = require("script.util")
 
 
 --local waiting_time = settings.global["LPN-waiting_time"].value
-local time_clearer = settings.global["LPN-clearer"].value
-local default_rate = settings.global["LPN-rate"].value
+
+
 
 
 
@@ -204,6 +204,7 @@ function network_class.update_incomming_platform(network, entity_number, item, q
 end
 
 function network_class.update_incomming(network, entity_number, item, quality, quantity, request, stock)
+    local default_rate = settings.global["LPN-rate"].value
     if not network.building["ptflog-requester"][entity_number].incomming[item .. "_" .. quality] then
         --do nothing
         network.building["ptflog-requester"][entity_number].incomming[item .. "_" .. quality] = {
@@ -401,7 +402,8 @@ function network_class.add_request(network, entity_number, item, quantity, quali
         --game.print("passer par la")
     end
 
-    
+    local let_free_slot= settings.global["LPN-free_slot"].value or 10
+    local number_free_slot_item=(let_free_slot*prototypes.item[item].stack_size) or 0
     for i, plats in ipairs(platforms_registered) do
         for j = #plats, 1, -1 do
             if quantity <= 0 or provider.stock < rocket_rounded(item, 1) then return end
@@ -446,7 +448,7 @@ function network_class.add_request(network, entity_number, item, quantity, quali
                 quality })
                 real_provided = math.min(quantity - ptf_stock, rocket_rounded(item, provider.stock),
                     plats[j].hub.get_inventory(defines.inventory.hub_main).get_insertable_count({ name = item, quality =
-                    quality }))
+                    quality })-number_free_slot_item)
                 real_provided = rocket_rounded(item, real_provided)
 
                 if add_platform_request(plats[j], provider.surface.planet, item, quality, real_provided + ptf_stock) then
@@ -473,7 +475,7 @@ function network_class.add_request(network, entity_number, item, quantity, quali
             elseif i == 8 then
                 local real_provided = math.min(quantity, rocket_rounded(item, provider.stock),
                     plats[j].hub.get_inventory(defines.inventory.hub_main).get_insertable_count({ name = item, quality =
-                    quality }))
+                    quality })-number_free_slot_item)
                 real_provided = rocket_rounded(item, real_provided)
                 if set_schedule(plats[j], provider.surface.planet, entity.surface.planet, false) and add_platform_request(plats[j], provider.surface.planet, item, quality, real_provided) then
                     network_class.update_reserved(network, provider.provider_number, item, quality, real_provided)
@@ -492,6 +494,7 @@ function network_class.add_request(network, entity_number, item, quantity, quali
 end
 
 local function update_network(e, name, network)
+    local default_rate = settings.global["LPN-rate"].value
     -- update request
     for number, state in pairs(network.building["ptflog-requester"]) do
         local entity = game.get_entity_by_unit_number(number)
@@ -537,6 +540,7 @@ local function update_network(e, name, network)
 end
 
 local function update_networks(e)
+    local time_clearer = settings.global["LPN-clearer"].value
     if e.tick % (60 * time_clearer) == 0 then
         for name, network in pairs(storage.ptflogchannel) do
             update_network(e, name, network)

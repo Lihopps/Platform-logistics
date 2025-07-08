@@ -32,6 +32,14 @@ data:extend(
       maximum_value = 1,
       minimum_value = 0.1,
     },
+    {
+      type = "double-setting",
+      name = "LPN-free_slot",
+      setting_type = "runtime-global",
+      default_value = 10,
+      maximum_value = 100,
+      minimum_value = 0,
+    },
    
   })
 
