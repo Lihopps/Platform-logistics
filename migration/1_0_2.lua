@@ -3,7 +3,7 @@ local v1_0_2={}
 
 function v1_0_2.change()
     local oldptflogchannel=storage.ptflogchannel
-    helpers.write_file("test.text",helpers.table_to_json(oldptflogchannel))
+    --helpers.write_file("test.text",helpers.table_to_json(oldptflogchannel))
     storage.ptflogchannel={}
     network.create_channel("DEFAULT")
     for entity_number,channel_name in pairs(storage.ptflogtracker) do

@@ -4,7 +4,7 @@ Adds Requester and Provider for Space Platform in order to building a fully auto
 
 ## Installation
 
-[Download on the Mod Portal.](https://mods.factorio.com/mod/Platform_logistics)
+[Download on the Mod Portal.](https://mods.factorio.com/mod/Platform-logistics)
 
 ## Usage
 
