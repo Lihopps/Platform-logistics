@@ -32,7 +32,7 @@ function v1_0_2.change()
                 for k,v in pairs(oldptflogchannel) do
                     for num,inc in pairs(v.building["ptflog-requester"]) do
                         if num==entity_number then
-                            storage.ptflogchannel[channel_name].building["ptflog-requester"][entity_number].incomming=inc
+                            storage.ptflogchannel[channel_name].building["ptflog-requester"][entity_number].incomming=inc.incomming
                         end
                     end
                 end
@@ -45,7 +45,7 @@ function v1_0_2.change()
                 for k,v in pairs(oldptflogchannel) do
                     for num,res in pairs(v.building["ptflog-provider"]) do
                         if num==entity_number then
-                            storage.ptflogchannel[channel_name].building["ptflog-provider"][entity_number].reserved=res
+                            storage.ptflogchannel[channel_name].building["ptflog-provider"][entity_number].reserved=res.reserved
                         end
                     end
                 end
