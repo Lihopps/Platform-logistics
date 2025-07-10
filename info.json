@@ -10,7 +10,7 @@
 	"base >=2.0.0",
     "space-age>=2.0.0",
     "flib>=0.16.2"],
-    "description": "Adds Requester and Provider for Space Platform in order to building a fully automated,Space Platform logistic network.",
+    "description": "Adds Requester and Provider for Space Platform in order to build a fully automated,Space Platform logistic network.",
     "package": {
         "no_portal_upload": true,
         "git_publish_branch": "main"
