@@ -1,6 +1,8 @@
 local network=require("script.network")
 local v1_0_2={}
 
+
+--completely reset network and remet tout dedans
 function v1_0_2.change()
     local oldptflogchannel=storage.ptflogchannel
     --helpers.write_file("test.text",helpers.table_to_json(oldptflogchannel))

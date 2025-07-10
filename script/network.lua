@@ -2,14 +2,6 @@ local LPN_gui_manager = require("script.LPN_gui_manager")
 local util = require("script.util")
 
 
---local waiting_time = settings.global["LPN-waiting_time"].value
-
-
-
-
-
-
-
 ---@param platform LuaSpacePlatform
 local function clear_platform_request(platform)
     if not platform or not platform.valid then return end
