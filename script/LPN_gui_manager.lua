@@ -15,9 +15,9 @@ local function on_slider_rate_changed(e)
     local tags = e.element.tags
     if not tags then return end
     if not tags.channel or not tags.unit_number or not tags.item then return end
-    storage.ptflogchannel[tags.channel].building["ptflog-requester"][tags.unit_number].incomming[tags.item].rate = e
-    .element.slider_value
+    storage.ptflogchannel[tags.channel].building["ptflog-requester"][tags.unit_number].incomming[tags.item].rate = e.element.slider_value
     e.element.parent["label_" .. tags.unit_number .. "_" .. tags.item].caption = (e.element.slider_value * 100) .. "%"
+    e.element.parent["labelincomming_" .. tags.unit_number .. "_" .. tags.item].caption="[< "..format.number(e.element.slider_value*(tags.request or 0),true).."]"
 end
 
 local function reset_request(e)
@@ -260,13 +260,19 @@ local function create_request_table(entity)
                     value_step = 0.1,
                     value = rate,
                     caption = "test",
-                    tags = { unit_number = entity.unit_number, channel = channel, item = item },
+                    tags = { unit_number = entity.unit_number, channel = channel, item = item,request=request or 0 },
                     handler = { [defines.events.on_gui_value_changed] = on_slider_rate_changed },
                 },
                 {
                     type = "label",
                     name = "label_" .. entity.unit_number .. "_" .. item,
                     caption = (rate * 100) .. "%"
+                },
+                {
+                    type = "label",
+                    name = "labelincomming_" .. entity.unit_number .. "_" .. item,
+                    caption = "[< "..format.number(rate*request, true).."]",
+                    tooltip={"gui.stock_inferior"}
                 }
             }
         })

@@ -14,7 +14,6 @@ end
 function main.on_configuration_changed(e)
     migrations.on_configuration_changed(e)
     LPN_gui_manager.rebuild()
-
 end
 
 main.events={
