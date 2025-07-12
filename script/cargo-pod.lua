@@ -26,7 +26,7 @@ local function on_cargo_pod_finished_descending(e)
                                         local platform=cargo_pod.cargo_pod_origin.unit_number
                                         network_class.update_incomming(storage.ptflogchannel[channel],destination.station.unit_number,contents[i].name,contents[i].quality,-contents[i].count)
                                         network_class.update_incomming_platform(storage.ptflogchannel[channel],destination.station.unit_number,contents[i].name,contents[i].quality,platform)
-                                        LPN_gui_manager.update_manager__gen_gui()
+                                        --LPN_gui_manager.update_manager__gen_gui()
                                     end
                                 end
                             end

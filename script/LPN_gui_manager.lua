@@ -683,7 +683,7 @@ end
 
 LPN_gui_manager.events = {
     [defines.events.on_gui_closed] = on_gui_closed,
-    --[defines.events.on_tick] = update_manager_gui,
+    [defines.events.on_tick] = update_manager_gui,
     [defines.events.on_lua_shortcut] = toogle_visibility_short,
     ["toggle-LPN-MANAGER"] = toogle_visibility_short,
   
