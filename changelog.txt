@@ -1,7 +1,10 @@
 ---------------------------------------------------------------------------------------------------
 Version: 1.0.3
 Date: ????
-  Changes:
+  Bugfixes:
+    - Corret a bug where script trying to close mod gui when it's not open[#4]
+  Locale:
+    - Change some description to be more explicit
 ---------------------------------------------------------------------------------------------------
 Version: 1.0.2
 Date: 2025-07-08
