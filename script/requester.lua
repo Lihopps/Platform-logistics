@@ -1,4 +1,5 @@
-local network = require "script.network"
+local network = require("script.network")
+local LPN_gui_manager=require("script.LPN_gui_manager")
 
 
 local function on_entity_build(e)
@@ -8,6 +9,7 @@ local function on_entity_build(e)
 			incomming={}
 		}
 		storage.ptflogtracker[e.entity.unit_number]="DEFAULT"
+		LPN_gui_manager.update_manager__gen_gui()
 		local sections = e.entity.get_logistic_sections()
 		local point=e.entity.get_logistic_point(defines.logistic_member_index.logistic_container)
 		if point.trash_not_requested then
@@ -36,6 +38,7 @@ local function on_entity_disapear(e)
 	if entity.name == "ptflog-requester" then
 		storage.ptflogchannel["DEFAULT"].building["ptflog-requester"][e.entity.unit_number] = nil
 		storage.ptflogtracker[e.entity.unit_number]=nil
+		LPN_gui_manager.update_manager__gen_gui()
 	end
 
 end

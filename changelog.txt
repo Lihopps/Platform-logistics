@@ -2,6 +2,7 @@
 Version: 1.0.4
 Date: ????
   Changes:
+    - Change the way the LPN GUI MANAGER was updated in order to create less lag spike
 ---------------------------------------------------------------------------------------------------
 Version: 1.0.3
 Date: 2025-07-12

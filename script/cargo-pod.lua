@@ -1,4 +1,5 @@
 local network_class=require("script.network")
+local LPN_gui_manager=require("script.LPN_gui_manager")
 
 local function on_cargo_pod_finished_descending(e)
     local cargo_pod = e.cargo_pod
@@ -25,6 +26,7 @@ local function on_cargo_pod_finished_descending(e)
                                         local platform=cargo_pod.cargo_pod_origin.unit_number
                                         network_class.update_incomming(storage.ptflogchannel[channel],destination.station.unit_number,contents[i].name,contents[i].quality,-contents[i].count)
                                         network_class.update_incomming_platform(storage.ptflogchannel[channel],destination.station.unit_number,contents[i].name,contents[i].quality,platform)
+                                        LPN_gui_manager.update_manager__gen_gui()
                                     end
                                 end
                             end

@@ -1,3 +1,5 @@
+local LPN_gui_manager=require("script.LPN_gui_manager")
+
 local function on_entity_build(e)
     if not e.entity then return end
     if e.entity.name=="ptflog-provider" then  
@@ -5,6 +7,7 @@ local function on_entity_build(e)
             reserved={}
         }
         storage.ptflogtracker[e.entity.unit_number]="DEFAULT"
+        LPN_gui_manager.update_manager__gen_gui()
         --e.entity.operable=false
     end
 end
@@ -17,6 +20,7 @@ local function on_entity_disapear(e)
 	if entity.name == "ptflog-provider" then
 		storage.ptflogchannel["DEFAULT"].building["ptflog-provider"][e.entity.unit_number] = nil
         storage.ptflogtracker[e.entity.unit_number]=nil
+        LPN_gui_manager.update_manager__gen_gui()
 	end
 
 end

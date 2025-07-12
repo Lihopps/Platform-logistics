@@ -410,6 +410,7 @@ function network_class.add_request(network, entity_number, item, quantity, quali
                         plats[j].hub.unit_number, true)
                     quantity = quantity - real_provided
                     table.remove(platforms_registered[i], j)
+                    LPN_gui_manager.update_manager__gen_gui()
                 end
             elseif i == 2 or i == 3 then
                 local real_provided = plats[j].hub.get_inventory(defines.inventory.hub_main).get_item_count({ name = item, quality =
@@ -421,6 +422,7 @@ function network_class.add_request(network, entity_number, item, quantity, quali
                         plats[j].hub.unit_number, true)
                     quantity = quantity - real_provided
                     table.remove(platforms_registered[i], j)
+                    LPN_gui_manager.update_manager__gen_gui()
                 end
             elseif i == 4 then
                 local real_provided = plats[j].hub.get_inventory(defines.inventory.hub_main).get_item_count({ name = item, quality =
@@ -432,6 +434,7 @@ function network_class.add_request(network, entity_number, item, quantity, quali
                         plats[j].hub.unit_number, true)
                     quantity = quantity - real_provided
                     table.remove(platforms_registered[i], j)
+                    LPN_gui_manager.update_manager__gen_gui()
                 end
             elseif i == 5 or i == 7 then
                 local real_provided = 0
@@ -452,6 +455,7 @@ function network_class.add_request(network, entity_number, item, quantity, quali
                         plats[j].hub.unit_number, true)
                     quantity = quantity - (real_provided + ptf_stock)
                     table.remove(platforms_registered[i], j)
+                    LPN_gui_manager.update_manager__gen_gui()
                 end
             elseif i == 6 then
                 local real_provided = plats[j].hub.get_inventory(defines.inventory.hub_main).get_item_count({ name = item, quality =
@@ -463,6 +467,7 @@ function network_class.add_request(network, entity_number, item, quantity, quali
                         plats[j].hub.unit_number, true)
                     quantity = quantity - real_provided
                     table.remove(platforms_registered[i], j)
+                    LPN_gui_manager.update_manager__gen_gui()
                 end
             elseif i == 8 then
                 local real_provided = math.min(quantity, rocket_rounded(item, provider.stock),
@@ -478,6 +483,7 @@ function network_class.add_request(network, entity_number, item, quantity, quali
                         plats[j].hub.unit_number, true)
                     quantity = quantity - real_provided
                     table.remove(platforms_registered[i], j)
+                    LPN_gui_manager.update_manager__gen_gui()
                 end
             end
         end

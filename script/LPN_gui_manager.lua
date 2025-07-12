@@ -25,13 +25,14 @@ local function reset_request(e)
     local unit_number = e.element.tags["unit_number"]
     local item_and_qual = e.element.tags["item_and_qual"]
     storage.ptflogchannel[channel].building["ptflog-requester"][unit_number].incomming[item_and_qual] = nil
-    for k, player in pairs(game.players) do
-        if player.gui.screen["LPN-manager-gui"] then
-            if player.gui.screen["LPN-manager-gui"].visible then
-                LPN_gui_manager.update_general_flow(player)
-            end
-        end
-    end
+    LPN_gui_manager.update_manager__gen_gui()
+    -- for k, player in pairs(game.players) do
+    --     if player.gui.screen["LPN-manager-gui"] then
+    --         if player.gui.screen["LPN-manager-gui"].visible then
+    --             LPN_gui_manager.update_general_flow(player)
+    --         end
+    --     end
+    -- end
 end
 
 local function on_view_requester(e)
@@ -81,13 +82,14 @@ local function reset_reserved(e)
     local unit_number = e.element.tags["unit_number"]
     local item_and_qual = e.element.tags["item_and_qual"]
     storage.ptflogchannel[channel].building["ptflog-provider"][unit_number].reserved[item_and_qual] = nil
-    for k, player in pairs(game.players) do
-        if player.gui.screen["LPN-manager-gui"] then
-            if player.gui.screen["LPN-manager-gui"].visible then
-                LPN_gui_manager.update_general_flow(player)
-            end
-        end
-    end
+    LPN_gui_manager.update_manager__gen_gui()
+    -- for k, player in pairs(game.players) do
+    --     if player.gui.screen["LPN-manager-gui"] then
+    --         if player.gui.screen["LPN-manager-gui"].visible then
+    --             LPN_gui_manager.update_general_flow(player)
+    --         end
+    --     end
+    -- end
 end
 
 local function create_provide_table(entity)
@@ -412,13 +414,14 @@ local function reset_network(e)
     if storage.ptflogchannel[channel] then
         util.clear_network(channel, storage.ptflogchannel[channel], true)
     end
-    for k, player in pairs(game.players) do
-        if player.gui.screen["LPN-manager-gui"] then
-            if player.gui.screen["LPN-manager-gui"].visible then
-                update_general_flow(player.gui.screen["LPN-manager-gui"]["general_flow"])
-            end
-        end
-    end
+    LPN_gui_manager.update_manager__gen_gui()
+    -- for k, player in pairs(game.players) do
+    --     if player.gui.screen["LPN-manager-gui"] then
+    --         if player.gui.screen["LPN-manager-gui"].visible then
+    --             update_general_flow(player.gui.screen["LPN-manager-gui"]["general_flow"])
+    --         end
+    --     end
+    -- end
 end
 
 local function channel_changed(e)
@@ -436,6 +439,20 @@ local function update_manager_gui(e)
         end
     end
 end
+
+
+function LPN_gui_manager.update_manager__gen_gui()
+    --game.print("general update")
+    for k, player in pairs(game.players) do
+        --game.print(player.name)
+        if player.gui.screen["LPN-manager-gui"] then
+            if player.gui.screen["LPN-manager-gui"].visible then
+                update_general_flow(player.gui.screen["LPN-manager-gui"]["general_flow"])
+            end
+        end
+    end
+end
+
 
 local function toogle_visibility(e)
     if not e.element then return end
@@ -660,7 +677,7 @@ end
 
 LPN_gui_manager.events = {
     [defines.events.on_gui_closed] = on_gui_closed,
-    [defines.events.on_tick] = update_manager_gui,
+    --[defines.events.on_tick] = update_manager_gui,
     [defines.events.on_lua_shortcut] = toogle_visibility_short,
     ["toggle-LPN-MANAGER"] = toogle_visibility_short,
   
