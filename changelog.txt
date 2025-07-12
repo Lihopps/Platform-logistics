@@ -1,6 +1,8 @@
 ---------------------------------------------------------------------------------------------------
 Version: 1.0.4
 Date: ????
+  Features:
+    - Add label in the gui to better explain when items are requested
   Changes:
     - Change the way the LPN GUI MANAGER was updated in order to create less lag spike
 ---------------------------------------------------------------------------------------------------
