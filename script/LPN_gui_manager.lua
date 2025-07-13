@@ -11,13 +11,23 @@ local padding = 3
 
 local LPN_gui_manager = {}
 
+local function on_collapse_click(e)
+    local requester = e.element.parent.parent
+    if not requester then return end
+    if not requester.valid then return end
+    requester["requester_request_state_" .. e.element.tags["unit_number"]].visible = not requester
+    ["requester_request_state_" .. e.element.tags["unit_number"]].visible
+end
+
 local function on_slider_rate_changed(e)
     local tags = e.element.tags
     if not tags then return end
     if not tags.channel or not tags.unit_number or not tags.item then return end
-    storage.ptflogchannel[tags.channel].building["ptflog-requester"][tags.unit_number].incomming[tags.item].rate = e.element.slider_value
+    storage.ptflogchannel[tags.channel].building["ptflog-requester"][tags.unit_number].incomming[tags.item].rate = e
+    .element.slider_value
     e.element.parent["label_" .. tags.unit_number .. "_" .. tags.item].caption = (e.element.slider_value * 100) .. "%"
-    e.element.parent["labelincomming_" .. tags.unit_number .. "_" .. tags.item].caption="[< "..format.number(e.element.slider_value*(tags.request or 0),true).."]"
+    e.element.parent["labelincomming_" .. tags.unit_number .. "_" .. tags.item].caption = "[< " ..
+    format.number(e.element.slider_value * (tags.request or 0), true) .. "]"
 end
 
 local function reset_request(e)
@@ -124,7 +134,7 @@ local function create_provide_table(entity)
             type = "label",
             style_mods = { vertical_align = "center", margin = margin, padding = padding },
             caption = "[item=" .. name_and_qual[1] .. ",quality=" .. name_and_qual[2] .. "]",
-            elem_tooltip={type="item",name=name_and_qual[1]},
+            elem_tooltip = { type = "item", name = name_and_qual[1] },
             --tooltip = name_and_qual[1]
         })
         table.insert(table1, {
@@ -134,7 +144,7 @@ local function create_provide_table(entity)
             caption = format.number(reserved, true),
             tooltip = reserved
         })
-         table.insert(table1, {
+        table.insert(table1, {
             type = "button",
             --style = "frame_action_button",
             style_mods = { margin = 3 },
@@ -219,7 +229,7 @@ local function create_request_table(entity)
             type = "label",
             style_mods = { vertical_align = "center", margin = margin, padding = padding },
             caption = "[item=" .. name_and_qual[1] .. ",quality=" .. name_and_qual[2] .. "]",
-            elem_tooltip={type="item",name=name_and_qual[1]},
+            elem_tooltip = { type = "item", name = name_and_qual[1] },
             --tooltip = name_and_qual[1]
         })
         table.insert(table1, {
@@ -260,7 +270,7 @@ local function create_request_table(entity)
                     value_step = 0.1,
                     value = rate,
                     caption = "test",
-                    tags = { unit_number = entity.unit_number, channel = channel, item = item,request=request or 0 },
+                    tags = { unit_number = entity.unit_number, channel = channel, item = item, request = request or 0 },
                     handler = { [defines.events.on_gui_value_changed] = on_slider_rate_changed },
                 },
                 {
@@ -271,8 +281,8 @@ local function create_request_table(entity)
                 {
                     type = "label",
                     name = "labelincomming_" .. entity.unit_number .. "_" .. item,
-                    caption = "[< "..format.number(rate*request, true).."]",
-                    tooltip={"gui.stock_inferior"}
+                    caption = "[< " .. format.number(rate * request, true) .. "]",
+                    tooltip = { "gui.stock_inferior" }
                 }
             }
         })
@@ -295,9 +305,34 @@ local function create_request_table(entity)
     return table1
 end
 
+local function update_request_flow(general_flow)
+    local tab_index = general_flow.selected_tab_index
+    if tab_index == nil then
+        tab_index = 1
+        general_flow.selected_tab_index = 1
+    end
+    for _, requester_gen_flow in pairs(general_flow.children[2 * tab_index].children) do
+        local requester_request_table = requester_gen_flow.children[2]
+        if not requester_request_table then return end
+        if not requester_request_table.valid then return end
+        if requester_request_table.visible then
+            local entity = game.get_entity_by_unit_number(requester_request_table.tags.unit_number)
+            if entity and entity.valid then
+                if tab_index == 1 then
+                    requester_request_table.clear()
+                    gui.add(requester_request_table, create_request_table(entity))
+                else
+                    requester_request_table.clear()
+                    gui.add(requester_request_table, create_provide_table(entity))
+                end
+            end
+        end
+    end
+end
+
 local function update_general_flow(general_flow)
     local channel = general_flow.parent["selection_flow"]["channel_selector"].items
-    [general_flow.parent["selection_flow"]["channel_selector"].selected_index]
+        [general_flow.parent["selection_flow"]["channel_selector"].selected_index]
     general_flow.children[2].clear()
     general_flow.children[4].clear()
     local tab_index = general_flow.selected_tab_index
@@ -320,12 +355,12 @@ local function update_general_flow(general_flow)
                             type = "flow",
                             name = "requester_state_" .. number,
                             direction = "horizontal",
-                            style_mods = { vertical_align = "center", horizontally_stretchable = true, left_padding = 5, top_margin = 3 },
+                            style_mods = { vertical_align = "center", horizontally_stretchable = true, left_padding = 5, top_margin = 3, bottom_margin = 8 },
                             children = {
                                 {
                                     type = "label",
-                                    style_mods = { left_padding = 5, top_margin = 3 },
-                                    caption = {"","[planet=" .. planet.name .. "] ",{"gui.req-num"}," ",number},
+                                    style_mods = { left_padding = 5, top_margin = 3, bottom_margin = 3 },
+                                    caption = { "", "[planet=" .. planet.name .. "] ", { "gui.req-num" }, " ", number },
                                     tooltip = "[planet=" .. planet.name .. "]" .. planet.name
                                 },
                                 {
@@ -338,14 +373,27 @@ local function update_general_flow(general_flow)
                                     tags = { unit_number = number },
                                     handler = { [defines.events.on_gui_click] = on_view_requester },
                                 },
+                                {
+                                    type = "sprite-button",
+                                    style = "frame_action_button",
+                                    style_mods = { margin = 3 },
+                                    sprite = "utility/dropdown",
+                                    name = "collapse_" .. number,
+                                    tooltip = { "gui.deploy" },
+                                    auto_toggle = true,
+                                    tags = { unit_number = number },
+                                    handler = { [defines.events.on_gui_click] = on_collapse_click },
+                                },
                             }
                         },
                         {
                             type = "table",
-                            name = "requester_request_state_number",
+                            name = "requester_request_state_" .. number,
                             style = "table_with_selection",
+                            visible = false,
                             style_mods = { margin = 5, horizontally_stretchable = true, horizontal_align = "center", },
                             column_count = 8,
+                            tags = { unit_number = number },
                             children = create_request_table(entity)
                         }
                     }
@@ -369,12 +417,12 @@ local function update_general_flow(general_flow)
                             type = "flow",
                             name = "requester_state_" .. number,
                             direction = "horizontal",
-                            style_mods = { vertical_align = "center", horizontally_stretchable = true, left_padding = 5, top_margin = 3 },
+                            style_mods = { vertical_align = "center", horizontally_stretchable = true, left_padding = 5, top_margin = 3, bottom_margin = 8 },
                             children = {
                                 {
                                     type = "label",
-                                    style_mods = { left_padding = 5, top_margin = 3 },
-                                    caption = {"","[planet=" .. planet.name .. "] ",{"gui.prov-num"}," ",number},
+                                    style_mods = { left_padding = 5, top_margin = 3, bottom_margin = 3 },
+                                    caption = { "", "[planet=" .. planet.name .. "] ", { "gui.prov-num" }, " ", number },
                                     tooltip = "[planet=" .. planet.name .. "]" .. planet.name
                                 },
                                 {
@@ -387,14 +435,27 @@ local function update_general_flow(general_flow)
                                     tags = { unit_number = number },
                                     handler = { [defines.events.on_gui_click] = on_view_requester },
                                 },
+                                {
+                                    type = "sprite-button",
+                                    style = "frame_action_button",
+                                    style_mods = { margin = 3 },
+                                    sprite = "utility/dropdown",
+                                    name = "collapse_" .. number,
+                                    tooltip = { "gui.deploy" },
+                                    auto_toggle = true,
+                                    tags = { unit_number = number },
+                                    handler = { [defines.events.on_gui_click] = on_collapse_click },
+                                },
                             }
                         },
                         {
                             type = "table",
-                            name = "requester_request_state_number",
+                            name = "requester_request_state_" .. number,
                             style = "table_with_selection",
                             style_mods = { margin = 5, horizontally_stretchable = true, horizontal_align = "center", },
+                            visible = false,
                             column_count = 3,
+                            tags = { unit_number = number },
                             children = create_provide_table(entity)
                         }
                     }
@@ -404,6 +465,7 @@ local function update_general_flow(general_flow)
         end
         gui.add(general_flow.children[4], flows)
     end
+    update_request_flow(general_flow)
 end
 
 
@@ -439,7 +501,8 @@ local function update_manager_gui(e)
         for k, player in pairs(game.players) do
             if player.gui.screen["LPN-manager-gui"] then
                 if player.gui.screen["LPN-manager-gui"].visible then
-                    update_general_flow(player.gui.screen["LPN-manager-gui"]["general_flow"])
+                    --update_general_flow(player.gui.screen["LPN-manager-gui"]["general_flow"])
+                    update_request_flow(player.gui.screen["LPN-manager-gui"]["general_flow"])
                 end
             end
         end
@@ -458,7 +521,6 @@ function LPN_gui_manager.update_manager__gen_gui()
         end
     end
 end
-
 
 local function toogle_visibility(e)
     if not e.element then return end
@@ -603,7 +665,8 @@ local function create_lpn_manager_gui(player)
                         {
                             tab = {
                                 type = "tab",
-                                caption = {"item-name.ptflog-requester"},
+                                caption = { "item-name.ptflog-requester" },
+                                tooltip={"gui.requestertabdescription"}
                             },
                             content = {
                                 type = "scroll-pane",
@@ -615,7 +678,8 @@ local function create_lpn_manager_gui(player)
                         {
                             tab = {
                                 type = "tab",
-                                caption = {"item-name.ptflog-provider"},
+                                caption = { "item-name.ptflog-provider" },
+                                tooltip={"gui.providertabdescription"}
                             },
                             content = {
                                 type = "scroll-pane",
@@ -641,12 +705,13 @@ function LPN_gui_manager.rebuild()
             create_lpn_manager_gui(player)
         end
     end
+    game.print("LOGISTIC PLANET NETWORK : LPN GUI MANAGER REBUILT")
 end
 
 commands.add_command("lpn_rebuild", nil,
     function(command)
-        LPN_gui_manager.rebuild()
-        game.print("LPN GUI MANAGER REBUILT")
+       LPN_gui_manager.rebuild()
+       game.print("LOGISTIC PLANET NETWORK : LPN GUI MANAGER REBUILT")
     end)
 
 function LPN_gui_manager.update_general_flow(player)
@@ -686,7 +751,7 @@ LPN_gui_manager.events = {
     [defines.events.on_tick] = update_manager_gui,
     [defines.events.on_lua_shortcut] = toogle_visibility_short,
     ["toggle-LPN-MANAGER"] = toogle_visibility_short,
-  
+
 
 }
 
@@ -698,8 +763,9 @@ gui.add_handlers({
     reset_network = reset_network,
     reset_request = reset_request,
     give_book = give_book,
-    reset_reserved=reset_reserved,
-    tab_changed=tab_changed
+    reset_reserved = reset_reserved,
+    tab_changed = tab_changed,
+    on_collapse_click = on_collapse_click
 })
 
 return LPN_gui_manager
