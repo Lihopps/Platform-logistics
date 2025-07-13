@@ -5,11 +5,12 @@ Date: ????
     - Add label in the gui to better explain when items are requested
   Changes:
     - Rework some aspect of LPN GUI MANAGER to reduce lag spike
+    - Add some check to avoid crash on nil value (cargo-pod) [#5]
 ---------------------------------------------------------------------------------------------------
 Version: 1.0.3
 Date: 2025-07-12
   Bugfixes:
-    - Corret a bug where script trying to close mod gui when it's not open[#4]
+    - Corret a bug where script trying to close mod gui when it's not open [#4]
   Locale:
     - Change some description to be more explicit
 ---------------------------------------------------------------------------------------------------

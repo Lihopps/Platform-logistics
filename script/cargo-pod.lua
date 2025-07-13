@@ -1,6 +1,18 @@
-local network_class=require("script.network")
-local LPN_gui_manager=require("script.LPN_gui_manager")
+local network_class = require("script.network")
+local LPN_gui_manager = require("script.LPN_gui_manager")
 
+local function check(channel, destination, contents, name)
+    --game.print("start test")
+    if not channel then return false end
+    if not storage.ptflogchannel[channel] then return false end
+    if not storage.ptflogchannel[channel].building["ptflog-" .. name] then return false end
+    if not storage.ptflogchannel[channel].building["ptflog-" .. name][destination.unit_number] then return false end
+    if not contents.name then return false end
+    if not contents.quality then return false end
+    if not storage.ptflogchannel[channel].building["ptflog-" .. name][destination.unit_number].incomming and not storage.ptflogchannel[channel].building["ptflog-" .. name][destination.unit_number].reserved then return false end
+    --game.print("test pass")
+    return true
+end
 local function on_cargo_pod_finished_descending(e)
     local cargo_pod = e.cargo_pod
     if cargo_pod and cargo_pod.valid then
@@ -15,18 +27,21 @@ local function on_cargo_pod_finished_descending(e)
                             local channel = storage.ptflogtracker[destination.station.unit_number]
                             if channel then
                                 for i = 1, #contents do
-                                    if storage.ptflogchannel[channel].building["ptflog-requester"][destination.station.unit_number].incomming[contents[i].name .. "_" .. contents[i].quality] then
-                                        local destination_inventory=destination.station.get_inventory(defines.inventory.cargo_landing_pad_main)
-                                        if destination_inventory and destination_inventory.valid then
-                                            local inserted=destination_inventory.insert(contents[i])
-                                            if inserted then
-                                                cargo_pod_inventory.remove({name=contents[i].name,count=inserted,quality=contents[i].quality})
+                                    if check(channel, destination.station, contents[i], "requester") then
+                                        if storage.ptflogchannel[channel].building["ptflog-requester"][destination.station.unit_number].incomming[contents[i].name .. "_" .. contents[i].quality] then
+                                            local destination_inventory = destination.station.get_inventory(defines.inventory.cargo_landing_pad_main)
+                                            if destination_inventory and destination_inventory.valid then
+                                                local inserted = destination_inventory.insert(contents[i])
+                                                if inserted then
+                                                    cargo_pod_inventory.remove({ name = contents[i].name, count =
+                                                    inserted, quality = contents[i].quality })
+                                                end
                                             end
+                                            local platform = cargo_pod.cargo_pod_origin.unit_number
+                                            network_class.update_incomming(storage.ptflogchannel[channel],destination.station.unit_number, contents[i].name, contents[i].quality,-contents[i].count)
+                                            network_class.update_incomming_platform(storage.ptflogchannel[channel],destination.station.unit_number, contents[i].name, contents[i].quality,platform)
+                                            --LPN_gui_manager.update_manager__gen_gui()
                                         end
-                                        local platform=cargo_pod.cargo_pod_origin.unit_number
-                                        network_class.update_incomming(storage.ptflogchannel[channel],destination.station.unit_number,contents[i].name,contents[i].quality,-contents[i].count)
-                                        network_class.update_incomming_platform(storage.ptflogchannel[channel],destination.station.unit_number,contents[i].name,contents[i].quality,platform)
-                                        --LPN_gui_manager.update_manager__gen_gui()
                                     end
                                 end
                             end
@@ -41,8 +56,10 @@ local function on_cargo_pod_finished_descending(e)
                                     for _, provider in ipairs(providers) do
                                         if storage.ptflogtracker[provider.unit_number] == channel then
                                             for i = 1, #contents do
-                                                if storage.ptflogchannel[channel].building["ptflog-provider"][provider.unit_number].reserved[contents[i].name .. "_" .. contents[i].quality] then
-                                                    network_class.update_reserved(storage.ptflogchannel[channel],provider.unit_number,contents[i].name,contents[i].quality,-contents[i].count)
+                                                if check(channel, provider, contents[i], "provider") then
+                                                    if storage.ptflogchannel[channel].building["ptflog-provider"][provider.unit_number].reserved[contents[i].name .. "_" .. contents[i].quality] then
+                                                        network_class.update_reserved(storage.ptflogchannel[channel],provider.unit_number, contents[i].name, contents[i].quality,-contents[i].count)
+                                                    end
                                                 end
                                             end
                                         end
@@ -62,15 +79,15 @@ local function on_cargo_pod_finished_ascending(e)
 end
 
 local function on_space_platform_changed_state(e)
-    local platform=e.platform
+    local platform = e.platform
     if platform and platform.valid then
         if platform.surface then
-            if storage.ptflogtracker["S"..platform.surface.index] and storage.ptflogtracker["S"..platform.surface.index]~="NONE" then
-                if platform.state==defines.space_platform_state.waiting_at_station then
-                    local schedule=platform.schedule
+            if storage.ptflogtracker["S" .. platform.surface.index] and storage.ptflogtracker["S" .. platform.surface.index] ~= "NONE" then
+                if platform.state == defines.space_platform_state.waiting_at_station then
+                    local schedule = platform.schedule
                     if schedule then
-                        if #schedule.records==1 then
-                            network_class.set_platform_unloading(platform,schedule.records[1].station)
+                        if #schedule.records == 1 then
+                            network_class.set_platform_unloading(platform, schedule.records[1].station)
                         end
                     end
                 end
