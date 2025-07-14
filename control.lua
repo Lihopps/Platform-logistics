@@ -13,4 +13,4 @@ handler.add_libraries({
 	require("script.debug"),
 })
 
-lihop_debug=true
+lihop_debug=false

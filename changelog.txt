@@ -1,10 +1,6 @@
 ---------------------------------------------------------------------------------------------------
-Version: 1.0.5
-Date: ????
-  Changes:
----------------------------------------------------------------------------------------------------
 Version: 1.0.4
-Date: 2025-07-14
+Date: ???
   Bugfixes:
     - Correct bug when provider/requester where deleted the network don't remove them [#5]
   Features:
