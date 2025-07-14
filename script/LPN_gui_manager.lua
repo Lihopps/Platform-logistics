@@ -497,7 +497,7 @@ local function channel_changed(e)
 end
 
 local function update_manager_gui(e)
-    if e.tick % 60 == 0 then
+    if e.tick % 60 == 30 then
         for k, player in pairs(game.players) do
             if player.gui.screen["LPN-manager-gui"] then
                 if player.gui.screen["LPN-manager-gui"].visible then
@@ -708,11 +708,7 @@ function LPN_gui_manager.rebuild()
     game.print("LOGISTIC PLANET NETWORK : LPN GUI MANAGER REBUILT")
 end
 
-commands.add_command("lpn_rebuild", nil,
-    function(command)
-       LPN_gui_manager.rebuild()
-       game.print("LOGISTIC PLANET NETWORK : LPN GUI MANAGER REBUILT")
-    end)
+
 
 function LPN_gui_manager.update_general_flow(player)
     update_general_flow(player.gui.screen["LPN-manager-gui"]["general_flow"])

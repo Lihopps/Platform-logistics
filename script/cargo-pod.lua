@@ -1,18 +1,8 @@
 local network_class = require("script.network")
 local LPN_gui_manager = require("script.LPN_gui_manager")
+local util=require("script.util")
 
-local function check(channel, destination, contents, name)
-    --game.print("start test")
-    if not channel then return false end
-    if not storage.ptflogchannel[channel] then return false end
-    if not storage.ptflogchannel[channel].building["ptflog-" .. name] then return false end
-    if not storage.ptflogchannel[channel].building["ptflog-" .. name][destination.unit_number] then return false end
-    if not contents.name then return false end
-    if not contents.quality then return false end
-    if not storage.ptflogchannel[channel].building["ptflog-" .. name][destination.unit_number].incomming and not storage.ptflogchannel[channel].building["ptflog-" .. name][destination.unit_number].reserved then return false end
-    --game.print("test pass")
-    return true
-end
+
 local function on_cargo_pod_finished_descending(e)
     local cargo_pod = e.cargo_pod
     if cargo_pod and cargo_pod.valid then
@@ -27,7 +17,7 @@ local function on_cargo_pod_finished_descending(e)
                             local channel = storage.ptflogtracker[destination.station.unit_number]
                             if channel then
                                 for i = 1, #contents do
-                                    if check(channel, destination.station, contents[i], "requester") then
+                                    if util.check(channel, destination.station, contents[i], "requester") then
                                         if storage.ptflogchannel[channel].building["ptflog-requester"][destination.station.unit_number].incomming[contents[i].name .. "_" .. contents[i].quality] then
                                             local destination_inventory = destination.station.get_inventory(defines.inventory.cargo_landing_pad_main)
                                             if destination_inventory and destination_inventory.valid then
@@ -56,7 +46,7 @@ local function on_cargo_pod_finished_descending(e)
                                     for _, provider in ipairs(providers) do
                                         if storage.ptflogtracker[provider.unit_number] == channel then
                                             for i = 1, #contents do
-                                                if check(channel, provider, contents[i], "provider") then
+                                                if util.check(channel, provider, contents[i], "provider") then
                                                     if storage.ptflogchannel[channel].building["ptflog-provider"][provider.unit_number].reserved[contents[i].name .. "_" .. contents[i].quality] then
                                                         network_class.update_reserved(storage.ptflogchannel[channel],provider.unit_number, contents[i].name, contents[i].quality,-contents[i].count)
                                                     end

@@ -2,6 +2,8 @@ local migrations = require("script.migrations")
 local network=require("script.network")
 local LPN_gui_manager=require("script.LPN_gui_manager")
 
+local v1_0_4=require("migration.1_0_4")
+
 local main={}
 
 function main.on_init()

@@ -36,9 +36,12 @@ local function on_entity_disapear(e)
 		return
 	end
 	if entity.name == "ptflog-requester" then
-		storage.ptflogchannel["DEFAULT"].building["ptflog-requester"][e.entity.unit_number] = nil
-		storage.ptflogtracker[e.entity.unit_number]=nil
-		LPN_gui_manager.update_manager__gen_gui()
+		local channel = storage.ptflogtracker[entity.unit_number]
+        if util.check(channel,entity,{name="iron-plate",quality="common"},"requester") then
+			storage.ptflogchannel[channel].building["ptflog-requester"][entity.unit_number] = nil
+			storage.ptflogtracker[entity.unit_number]=nil
+			LPN_gui_manager.update_manager__gen_gui()
+		end
 	end
 
 end

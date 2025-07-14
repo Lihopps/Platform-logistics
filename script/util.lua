@@ -110,4 +110,57 @@ function util.split(inputstr, sep)
     return t
 end
 
+
+function util.check(channel, entity, contents, name)
+    --game.print("start test")
+    local token=true
+    if not channel then 
+        token=false
+        goto save 
+    end
+    if not storage.ptflogchannel[channel] then 
+        token=false
+        goto save 
+    end
+    if not storage.ptflogchannel[channel].building["ptflog-" .. name] then 
+        token=false
+        goto save 
+    end
+    if not storage.ptflogchannel[channel].building["ptflog-" .. name][entity.unit_number] then 
+        token=false
+        goto save 
+    end
+    if not contents.name then 
+        token=false
+        goto save 
+    end
+    if not contents.quality then 
+        token=false
+        goto save 
+    end
+    if not storage.ptflogchannel[channel].building["ptflog-" .. name][entity.unit_number].incomming and not storage.ptflogchannel[channel].building["ptflog-" .. name][entity.unit_number].reserved then 
+        token=false
+        goto save 
+    end
+    --game.print("test pass")
+    ::save::
+    if token then
+        return token
+    else
+        local object={
+            channel=channel,
+            entity=entity,
+            contents=contents,
+            name=name,
+            storage=storage
+        }
+
+        helpers.write_file("check_fail_"..game.tick..".json",helpers.table_to_json(object))
+        if lihop_debug then
+            game.print("Some check fail see file")
+        end
+        return token
+    end
+end
+
 return util

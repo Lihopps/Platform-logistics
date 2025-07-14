@@ -1,3 +1,8 @@
+local LPN_gui_manager= require("script.LPN_gui_manager")
+
+local v1_0_4=require("migration.1_0_4")
+
+
 local debug={}
 
 function debug.network_request_state(network)
@@ -10,5 +15,16 @@ function debug.network_request_state(network)
     end
 end
 
+commands.add_command("lpn_rebuild", nil,
+    function(command)
+       LPN_gui_manager.rebuild()
+       game.print("LOGISTIC PLANET NETWORK : LPN GUI MANAGER REBUILT")
+    end)
+
+commands.add_command("lpn_migration", nil,
+    function(command) 
+       v1_0_4.change()
+       game.print("Simulation changement effectué")
+    end)
 
 return debug

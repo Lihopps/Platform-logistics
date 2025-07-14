@@ -10,5 +10,7 @@ handler.add_libraries({
 	require("script.research"),
 	require("script.LPN_gui_entity"),
 	require("script.LPN_gui_manager"),
-	--require("script.test"),
+	require("script.debug"),
 })
+
+lihop_debug=true

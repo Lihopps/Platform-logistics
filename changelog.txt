@@ -1,6 +1,8 @@
 ---------------------------------------------------------------------------------------------------
 Version: 1.0.4
 Date: ????
+  Bugfixes:
+    - Correct bug when provider/requester where deleted the network don't remove them [#5]
   Features:
     - Add label in the gui to better explain when items are requested
   Changes:
