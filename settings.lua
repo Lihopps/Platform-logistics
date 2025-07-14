@@ -40,6 +40,12 @@ data:extend(
       maximum_value = 100,
       minimum_value = 0,
     },
+    { 
+      type = "bool-setting",
+      name = "LPN-edit_file",
+      setting_type = "runtime-global",
+      default_value = false
+    },
    
   })
 

@@ -147,17 +147,18 @@ function util.check(channel, entity, contents, name)
     if token then
         return token
     else
-        local object={
-            channel=channel,
-            entity=entity,
-            contents=contents,
-            name=name,
-            storage=storage
-        }
-
-        helpers.write_file("check_fail_"..game.tick..".json",helpers.table_to_json(object))
-        if lihop_debug then
-            game.print("Some check fail see file")
+        if settings.global["LPN-edit_file"].value then
+            local object={
+                channel=channel,
+                entity=entity,
+                contents=contents,
+                name=name,
+                storage=storage
+            }
+            helpers.write_file("check_fail_"..game.tick..".json",helpers.table_to_json(object))
+            if lihop_debug then
+                game.print("Some check fail see file")
+            end
         end
         return token
     end

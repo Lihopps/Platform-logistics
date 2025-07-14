@@ -66,19 +66,22 @@ local function on_set_channel_clicked(e,chan)
             if channel=="NONE" then
                 storage.ptflogchannel[e.element.tags["current_channel"]].platform[key]=nil
                 storage.ptflogtracker[key] = nil
+                e.element.tags={ unit_number = entity.unit_number, current_channel = channel}
             elseif e.element.tags["current_channel"]=="NONE" then
                 storage.ptflogchannel[channel].platform[key]=entity.surface.platform
                 storage.ptflogtracker[key] = channel
+                e.element.tags={ unit_number = entity.unit_number, current_channel = channel}
             else
                 storage.ptflogchannel[e.element.tags["current_channel"]].platform[key]=nil
                 storage.ptflogchannel[channel].platform[key]=entity.surface.platform
                 storage.ptflogtracker[key] = channel
+                e.element.tags={ unit_number = entity.unit_number, current_channel = channel}
             end
 
         elseif entity.name == "ptflog-requester" then
             if channel=="NONE" then
                 storage.ptflogchannel[e.element.tags["current_channel"]].building["ptflog-requester"][key] = nil
-                e.element.tags["current_channel"]="NONE"
+                e.element.tags={ unit_number = entity.unit_number, current_channel = channel}
                 storage.ptflogtracker[key] = nil
             
             elseif e.element.tags["current_channel"]=="NONE" then
@@ -86,37 +89,50 @@ local function on_set_channel_clicked(e,chan)
                     incomming={}
                 }
                 storage.ptflogtracker[key] = channel
-                e.element.tags["current_channel"]=channel
+                e.element.tags={ unit_number = entity.unit_number, current_channel = channel}
             
             else
                 storage.ptflogchannel[channel].building["ptflog-requester"][key]=storage.ptflogchannel[e.element.tags["current_channel"]].building["ptflog-requester"][key]
                 storage.ptflogchannel[e.element.tags["current_channel"]].building["ptflog-requester"][key] = nil
                 storage.ptflogtracker[key] = channel
-                e.element.tags["current_channel"]=channel
+                e.element.tags={ unit_number = entity.unit_number, current_channel = channel}
             end
         elseif entity.name == "ptflog-provider" then
             if channel=="NONE" then
                 storage.ptflogchannel[e.element.tags["current_channel"]].building["ptflog-provider"][key] = nil
                 storage.ptflogtracker[key] = nil
-                e.element.tags["current_channel"]="NONE"
-            
+                e.element.tags={ unit_number = entity.unit_number, current_channel = channel}
+                
             elseif e.element.tags["current_channel"]=="NONE" then
                 storage.ptflogchannel[channel].building["ptflog-provider"][key]={
-                    incomming={}
+                    reserved={}
                 }
                 storage.ptflogtracker[key] = channel
-                e.element.tags["current_channel"]=channel
+                e.element.tags={ unit_number = entity.unit_number, current_channel = channel}
             
             else
                 storage.ptflogchannel[channel].building["ptflog-provider"][key]=storage.ptflogchannel[e.element.tags["current_channel"]].building["ptflog-provider"][key]
                 storage.ptflogchannel[e.element.tags["current_channel"]].building["ptflog-provider"][key] = nil
                 storage.ptflogtracker[key] = channel
-                e.element.tags["current_channel"]=channel
+                e.element.tags={ unit_number = entity.unit_number, current_channel = channel}
             end
         end
         if not chan then
             e.element.parent.parent["definition_flow"]["channel_label"].caption = "Current channel : " .. channel
         end
+
+        --besoin de reconstruire le bouton je sais pas pourquoi...
+        local parent=e.element.parent
+        e.element.destroy()
+        gui.add(parent,{
+                        type = "sprite-button",
+                        style = "item_and_count_select_confirm",
+                        sprite = "utility/check_mark",
+                        tooltip={"gui.set-channel"},
+                        tags = { unit_number = entity.unit_number, current_channel = channel },
+                        handler = { [defines.events.on_gui_click] = on_set_channel_clicked },
+                    })
+        
     end
 end
 
