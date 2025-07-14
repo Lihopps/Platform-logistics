@@ -5,7 +5,10 @@ Date: ????
 ---------------------------------------------------------------------------------------------------
 Version: 1.0.5
 Date: 2025-07-14
+  Features:
+    - Add tool for debugging
   Changes:
+    - Add some check to avoid crash on nil value for provider (channel changement) [#5]
 ---------------------------------------------------------------------------------------------------
 Version: 1.0.4
 Date: 2025-07-14
