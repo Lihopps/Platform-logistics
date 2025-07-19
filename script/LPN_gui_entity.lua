@@ -119,9 +119,9 @@ local function on_set_channel_clicked(e,chan)
         end
         if not chan then
             e.element.parent.parent["definition_flow"]["channel_label"].caption = "Current channel : " .. channel
-        end
-
+        
         --besoin de reconstruire le bouton je sais pas pourquoi...
+        --mais on le fait pas si c'est copié collé (le chan est présent que si copy paste)
         local parent=e.element.parent
         e.element.destroy()
         gui.add(parent,{
@@ -132,6 +132,11 @@ local function on_set_channel_clicked(e,chan)
                         tags = { unit_number = entity.unit_number, current_channel = channel },
                         handler = { [defines.events.on_gui_click] = on_set_channel_clicked },
                     })
+        
+        end
+
+        
+        
         
     end
 end
