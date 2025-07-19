@@ -1,5 +1,6 @@
 local network = require("script.network")
 local LPN_gui_manager=require("script.LPN_gui_manager")
+local util = require("script.util")
 
 
 local function on_entity_build(e)
