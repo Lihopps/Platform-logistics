@@ -80,7 +80,6 @@ local function set_platform_unloading(platform, planet_name)
                         new_filter.max = 0
                         new_filter.import_from = planet_name
                         table.insert(new_filters, new_filter)
-                        game.print(new_filter.value.name .. "_" .. new_filter.value.quality)
                         if not schedule.get_wait_condition({schedule_index=1},index) then
                             schedule.add_wait_condition({ schedule_index = 1 }, index, "item_count")
                         end
@@ -98,7 +97,6 @@ local function set_platform_unloading(platform, planet_name)
                             }
                         })
                         index = index + 1
-                        game.print(index)
                     end
                     section.filters = new_filters
                     return
