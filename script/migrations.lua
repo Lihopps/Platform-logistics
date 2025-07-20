@@ -3,7 +3,7 @@ local v1_0_2 =require("migration.1_0_2")
 local v1_0_4 =require("migration.1_0_4")
 
 local by_version = {
-  ["1.0.8"]=function()
+  ["1.1.0"]=function()
     if not storage.ptflogfilter then
       storage.ptflogfilter={}
     end
