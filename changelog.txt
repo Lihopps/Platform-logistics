@@ -1,6 +1,6 @@
 ---------------------------------------------------------------------------------------------------
 Version: 1.1.0
-Date: ????
+Date: 2025-07-20
   Features:
     - Add a way to filter planet for space-platform (in space-platform gui) [#8]
   Bugfixes:
