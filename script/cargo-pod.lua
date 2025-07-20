@@ -23,8 +23,9 @@ local function on_cargo_pod_finished_descending(e)
                                             if destination_inventory and destination_inventory.valid then
                                                 local inserted = destination_inventory.insert(contents[i])
                                                 if inserted then
-                                                    cargo_pod_inventory.remove({ name = contents[i].name, count =
-                                                    inserted, quality = contents[i].quality })
+                                                    if inserted>0 then
+                                                        cargo_pod_inventory.remove({ name = contents[i].name, count =inserted, quality = contents[i].quality })
+                                                    end
                                                 end
                                             end
                                             local platform = cargo_pod.cargo_pod_origin.unit_number

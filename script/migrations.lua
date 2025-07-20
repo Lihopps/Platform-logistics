@@ -3,6 +3,11 @@ local v1_0_2 =require("migration.1_0_2")
 local v1_0_4 =require("migration.1_0_4")
 
 local by_version = {
+  ["1.0.8"]=function()
+    if not storage.ptflogfilter then
+      storage.ptflogfilter={}
+    end
+  end,
   ["1.0.4"] = function()
     --reset all provider/requester to be their exist properly in the network  : github#5
     v1_0_4.change()

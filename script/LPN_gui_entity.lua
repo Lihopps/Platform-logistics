@@ -1,12 +1,6 @@
 local gui = require("__flib__.gui")
 local network_class = require("script.network")
-
--- local function on_space_platform_changed_state(e)
---     if e.old_state==defines.space_platform_state.starter_pack_on_the_way then
---        storage.ptflogchannel["DEFAULT"].platform[e.platform.surface.index]=e.platform
---        storage.ptflogtracker["S"..e.platform.surface.index]="DEFAULT"
---     end
--- end
+local util=require("script.util")
 
 local function on_gui_closed(e)
     local player = game.get_player(e.player_index)
@@ -275,12 +269,98 @@ local function create_gui_prov(entity, player)
     player.opened = prov.provider_channel
 end
 
+local function on_gui_switch_state_changed(e)
+    if not e.element or not e.element.valid then return end
+    if e.element.name=="lpnplatformstate" then
+        storage.ptflogfilter[e.element.tags.unit_number].state=e.element.switch_state
+    end
+end
 
-local function create_gui_sp(entity, player, def)
+local function filter_gui(unit_number)
+    if not storage.ptflogfilter[unit_number] then
+        storage.ptflogfilter[unit_number]={state="right",filter={}} -- left = allowed /right disallowed
+    end
+    local entity_data=storage.ptflogfilter[unit_number]
+    local filtergui={
+        type = "flow",
+        name="filter_frame_"..unit_number,
+        direction="vertical",
+        children={
+            {
+                type="switch",
+                name="lpnplatformstate",
+                switch_state=entity_data.state,
+                allow_none_state=false,
+                left_label_caption={"gui.left_label"},
+                right_label_caption={"gui.right_label"},
+                tags={unit_number=unit_number},
+                handler = { [defines.events.on_gui_switch_state_changed] = on_gui_switch_state_changed },
+            },
+            {
+                type="table",
+                style="slot_table",
+                column_count=5,
+                children={}
+            }
+        }
+    }
+    for k,v in pairs(entity_data.filter) do
+        table.insert(filtergui.children[2].children,{
+            type="choose-elem-button",
+            style="slot_button",
+            elem_type="space-location",
+            name="lpnfilterbutton_"..k,
+            ["space-location"]=k,
+            tags={unit_number=unit_number,location=k},
+            handler = { [defines.events.on_gui_elem_changed] = on_gui_elem_changed },
+        })
+    end
+    table.insert(filtergui.children[2].children,{
+            type="choose-elem-button",
+            elem_type="space-location",
+            style="slot_button",
+            name="lpnfilterbutton",
+            tags={unit_number=unit_number,location="chooser"},
+            handler = { [defines.events.on_gui_elem_changed] = on_gui_elem_changed },
+        })
+    return filtergui
+end
+
+local function on_gui_elem_changed(e)
+    if not e.element or not e.element.valid then return end
+    if string.find(e.element.name,"lpnfilterbutton_",0,true) then
+        if not storage.ptflogfilter[e.element.tags.unit_number].filter[e.element.elem_value] then
+            storage.ptflogfilter[e.element.tags.unit_number].filter[e.element.tags.location]=nil
+            if e.element.elem_value then
+                storage.ptflogfilter[e.element.tags.unit_number].filter[e.element.elem_value]=true
+            end
+            e.element.destroy()
+        else
+            util.create_flying_text(game.players[e.player_index],{"gui.alreadypresent"},nil,true)
+            e.element.elem_value=e.element.tags.location
+        end
+    elseif string.find(e.element.name,"lpnfilterbutton",0,true) then
+        if not storage.ptflogfilter[e.element.tags.unit_number].filter[e.element.elem_value] then
+            if e.element.elem_value then
+                storage.ptflogfilter[e.element.tags.unit_number].filter[e.element.elem_value]=true
+            end
+            local unit_number= e.element.tags.unit_number
+            local parent=e.element.parent.parent.parent
+            e.element.parent.parent.destroy()
+            gui.add(parent,filter_gui(unit_number))
+        else
+            util.create_flying_text(game.players[e.player_index],{"gui.alreadypresent"},nil,true)
+            e.element.elem_value=nil
+        end
+    end
+end
+
+
+local function create_gui_sp(entity, player, def,spgui)
     if player.gui.relative["spaceplatformchannel"] then
         player.gui.relative["spaceplatformchannel"].destroy()
     end
-    local platform = gui.add(player.gui.relative, {
+    local platform =  {
         type = "frame",
         name = "spaceplatformchannel",
         caption = {"gui.lpnchannelselector"},
@@ -291,14 +371,22 @@ local function create_gui_sp(entity, player, def)
         },
         direction = "vertical",
         children = { create_gui_base(entity, player) }
-    })
+    }
+    if spgui then
+       table.insert(platform.children,{
+                type = "line",
+                direction = "horizontal"
+            })
+       table.insert(platform.children,filter_gui(entity.unit_number))
+    end
+    gui.add(player.gui.relative,platform)
 end
 
 local function on_gui_opened(e)
     if game.players[e.player_index].force.technologies["LPN-starter"].researched then
         if e.entity and e.entity.valid then
             if e.entity.name == "space-platform-hub" then
-                create_gui_sp(e.entity, game.players[e.player_index], defines.relative_gui_type.space_platform_hub_gui)
+                create_gui_sp(e.entity, game.players[e.player_index], defines.relative_gui_type.space_platform_hub_gui,true)
             elseif e.entity.name == "ptflog-requester" then
                 create_gui_sp(e.entity, game.players[e.player_index], defines.relative_gui_type.cargo_landing_pad_gui)
             elseif e.entity.name == "ptflog-provider" then
@@ -323,7 +411,14 @@ local function on_entity_settings_pasted(e)
                         }
                     }
                     on_set_channel_clicked(event,new_channel)
-                    --storage.ptflogtracker["S"..e.destination.surface.index]=storage.ptflogtracker["S"..e.source.surface.index]
+                    
+                    --copy filter settings
+                    if not storage.ptflogfilter[e.source.unit_number] then
+                        storage.ptflogfilter[e.source.unit_number]={state="right",filter={}}
+                    end
+                    storage.ptflogfilter[e.destination.unit_number]=storage.ptflogfilter[e.source.unit_number]
+
+
                 end
             end
         end
@@ -335,7 +430,9 @@ local LPN_gui = {}
 LPN_gui.events = {
     [defines.events.on_gui_opened] = on_gui_opened,
     [defines.events.on_gui_closed] = on_gui_closed,
-    [defines.events.on_entity_settings_pasted] = on_entity_settings_pasted
+    [defines.events.on_entity_settings_pasted] = on_entity_settings_pasted,
+    [defines.events.on_gui_elem_changed] = on_gui_elem_changed,
+    [defines.events.on_gui_switch_state_changed] = on_gui_switch_state_changed 
 }
 
 gui.add_handlers({

@@ -1,6 +1,6 @@
 AVANT RELEASE:
     ajout:
-        
+    
     graphics:
         
     parameter:
@@ -8,6 +8,9 @@ AVANT RELEASE:
     msg erreur:
     
     documentation:
+        
+    local:
+    
         
         
 
@@ -19,8 +22,7 @@ PAS URGENT:
     les choiw du provider
     
     choix du bon provider (distance)
-    more signal types ?
-    energie pour provider ?
+    
     delete channel ?
     sound of entity
     sound of gui (ouvert/fermer)

@@ -51,5 +51,5 @@ data:extend({
 		  time = 30
 	},
     order = "a-b-b"
-	}
+	},
 })

@@ -11,6 +11,7 @@ function main.on_init()
     if not storage.ptflogchannel["DEFAULT"] then network.create_channel("DEFAULT") end
     if not storage.ptflogtracker then storage.ptflogtracker ={} end
     if not storage.ptflogmessenger then storage.ptflogmessenger ={} end
+    if not storage.ptflogfilter then storage.ptflogfilter ={} end
 end
 
 function main.on_configuration_changed(e)

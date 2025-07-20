@@ -164,4 +164,12 @@ function util.check(channel, entity, contents, name)
     end
 end
 
+function util.create_flying_text(player,text,position,cursor,type)
+    if not player or not player.valid then return end
+
+    player.create_local_flying_text{text=text,position=position,create_at_cursor=cursor}
+
+end
+
+
 return util
