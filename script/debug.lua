@@ -24,7 +24,7 @@ commands.add_command("lpn_rebuild", nil,
 commands.add_command("lpn_migration", nil,
     function(command) 
        v1_0_4.change()
-       game.print("Simulation changement effectué")
+       --game.print("Simulation changement effectué")
     end)
 
 return debug

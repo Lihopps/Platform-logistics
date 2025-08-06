@@ -30,4 +30,10 @@ en_stock,  on_orbit,   go_to_orbit, go_another_provider,  go_to_the_same_provide
 1           1          1                    0               0                   rien (mais un signe ?)
 1           1          1                    0               1                   impossible ?
 1           1          1                    1               0                   impossible ?
-1           1          1                    1               1                   impossible                
+1           1          1                    1               1                   impossible     
+
+
+
+
+l'arrivage=l'arrivage-lestock du cargo
+reel besoin==voulue-le stock-l'arrivage 

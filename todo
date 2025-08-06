@@ -1,6 +1,6 @@
 AVANT RELEASE:
     ajout:
-    
+        mettre a jour la version de flib
     graphics:
         
     parameter:
@@ -18,9 +18,7 @@ AVANT RELEASE:
 
 
 PAS URGENT:
-    optimiser le gui
-    les choiw du provider
-    
+     ? arrivée du pod (reversement image + declaration id )+replique sur toutes les planetes qui l'ont pas ( tout faire dans le final-update)
     choix du bon provider (distance)
     
     delete channel ?

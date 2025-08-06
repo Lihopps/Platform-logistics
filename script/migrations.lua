@@ -9,7 +9,7 @@ local by_version = {
     end
   end,
   ["1.0.4"] = function()
-    --reset all provider/requester to be their exist properly in the network  : github#5
+    --reset all provider/requester to be sure their exist properly in the network  : github#5
     v1_0_4.change()
   end,
   ["1.0.2"] = function()

@@ -3,6 +3,7 @@ tips titre : présentation entity prov request platform
 tips 1 : channel (create, define)
 tips 2 : platform schedule
 tips 3 : gui manager
+tips 4 : more landing pad per planet
 
 ]]
 
@@ -81,6 +82,23 @@ data:extend({
 		tag = "[img=LPN-manager-white]",
 		is_title = false,
         image="__Platform-logistics__/graphics/utility/tat-lpngm.png",
+		--simulation=simulations.spidertron
+	},
+	{
+		type = "tips-and-tricks-item",
+		name = "LPN-tat-4",
+		localised_description={"tips-and-tricks-item-description.LPN-tat-4"},
+		category = "LPN",
+		order = "4",
+		starting_status = "locked",
+        indent=1,
+		trigger =
+		{
+			type = "research",
+			technology = "LPN-landing-bonus"
+		},
+		is_title = false,
+        image="__Platform-logistics__/graphics/utility/tat-landing-bonus.png",
 		--simulation=simulations.spidertron
 	},
 })
