@@ -10,7 +10,7 @@ Date: 2025-08-16
     - Add new tips and trick
     - Add some tooltip to help players
   Bugfixes:
-    - fix : item with "_" in their names was not recognize [#12]
+    - fix : items with "_" in their name was not recognize properly [#12]
 ---------------------------------------------------------------------------------------------------
 Version: 1.1.1
 Date: 2025-07-20
