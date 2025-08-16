@@ -1,6 +1,6 @@
 ---------------------------------------------------------------------------------------------------
 Version: 1.2.0
-Date: ????
+Date: 2025-08-16
   Features:
     - Add tech to let players build more than one landing pad or LPN requester per planet
     - Add new tips and trick
