@@ -110,6 +110,12 @@ function util.split(inputstr, sep)
     return t
 end
 
+function util.name_and_qual(item)
+    local names=util.split(item,"_")
+    local qual=names[#names]
+    local name=string.gsub(item,"_"..qual,"")
+    return {name,qual}
+end
 
 function util.check(channel, entity, contents, name)
     --game.print("start test")

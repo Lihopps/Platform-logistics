@@ -118,7 +118,7 @@ local function create_provide_table(entity)
     }
     local channel = storage.ptflogtracker[entity.unit_number]
     for item, item_data in pairs(storage.ptflogchannel[channel].building["ptflog-provider"][entity.unit_number].reserved) do
-        local name_and_qual = util.split(item, "_")
+        local name_and_qual = util.name_and_qual(item)
         local reserved = (item_data.quantity or 0)
         table.insert(table1, {
             type = "label",
@@ -208,7 +208,7 @@ local function create_request_table(entity)
     }
     local channel = storage.ptflogtracker[entity.unit_number]
     for item, item_data in pairs(storage.ptflogchannel[channel].building["ptflog-requester"][entity.unit_number].incomming) do
-        local name_and_qual = util.split(item, "_")
+        local name_and_qual = util.name_and_qual(item)
         local request = (item_data.request or 0)
         local stock = (item_data.stock or 0)
         local incoming = (item_data.quantity or 0)

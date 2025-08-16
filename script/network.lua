@@ -664,6 +664,25 @@ function network_class.create_channel(name)
     LPN_gui_manager.update_channels()
 end
 
+function network_class.check_network()
+    for name, network in pairs(storage.ptflogchannel) do
+        for number,item_list in pairs(network.building["ptflog-requester"]) do
+            for name,item_data in pairs(item_list.incomming) do
+                if not prototypes.item[name] then
+                    item_list.incomming[name]=nil
+                end
+            end
+        end
+        for number,item_list in pairs(network.building["ptflog-provider"]) do
+            for name,item_data in pairs(item_list.reserved) do
+                if not prototypes.item[name] then
+                    item_list.reserved[name]=nil
+                end
+            end
+        end
+    end
+end
+
 network_class.events = {
     [defines.events.on_tick] = update_networks,
     [defines.events.on_player_clicked_gps_tag] = on_player_clicked_gps_tag,

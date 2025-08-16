@@ -5,6 +5,8 @@ Date: ????
     - Add tech to let players build more than one landing pad or LPN requester per planet
     - Add new tips and trick
     - Add some tooltip to help players
+  Bugfixes:
+    - fix : item with "_" in their names was not recognize [#12]
 ---------------------------------------------------------------------------------------------------
 Version: 1.1.1
 Date: 2025-07-20

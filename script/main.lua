@@ -16,6 +16,7 @@ end
 
 function main.on_configuration_changed(e)
     migrations.on_configuration_changed(e)
+    network.check_network()
     LPN_gui_manager.rebuild()
 end
 
