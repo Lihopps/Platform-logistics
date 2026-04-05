@@ -1,3 +1,5 @@
+local simulation=require("simulation.simulation")
+
 --[[
 tips titre : présentation entity prov request platform
 tips 1 : channel (create, define)
@@ -25,10 +27,45 @@ data:extend({
 			type = "research",
 			technology = "LPN-starter"
 		},
-		tag = "[virtual-signal=LPN-ship]",
 		is_title = true,
         image="__Platform-logistics__/graphics/utility/tat-title.png",
 		--simulation=simulations.spidertron
+	},
+	 {
+		type = "tips-and-tricks-item",
+		name = "LPN-tat-provider",
+		localised_description={"tips-and-tricks-item-description.LPN-tat-provider"},
+		category = "LPN",
+		order = "0a",
+		starting_status = "locked",
+        indent=1,
+		trigger =
+		{
+			type = "research",
+			technology = "LPN-starter"
+		},
+		--tag = "[virtual-signal=LPN-ship]",
+		is_title = false,
+        --image="__Platform-logistics__/graphics/utility/tat-channel.png",
+		simulation=simulation.lpn_provider2
+	},
+	{
+		type = "tips-and-tricks-item",
+		name = "LPN-tat-requester",
+		localised_description={"tips-and-tricks-item-description.LPN-tat-requester"},
+		category = "LPN",
+		order = "0b",
+		starting_status = "locked",
+        indent=1,
+		trigger =
+		{
+			type = "research",
+			technology = "LPN-starter"
+		},
+		--tag = "[virtual-signal=LPN-ship]",
+		is_title = false,
+        --image="__Platform-logistics__/graphics/utility/tat-channel.png",
+		simulation=simulation.lpn_requester
 	},
      {
 		type = "tips-and-tricks-item",
@@ -84,7 +121,7 @@ data:extend({
         image="__Platform-logistics__/graphics/utility/tat-lpngm.png",
 		--simulation=simulations.spidertron
 	},
-	{
+	--[[ {
 		type = "tips-and-tricks-item",
 		name = "LPN-tat-4",
 		localised_description={"tips-and-tricks-item-description.LPN-tat-4"},
@@ -100,5 +137,5 @@ data:extend({
 		is_title = false,
         image="__Platform-logistics__/graphics/utility/tat-landing-bonus.png",
 		--simulation=simulations.spidertron
-	},
+	}, ]]
 })

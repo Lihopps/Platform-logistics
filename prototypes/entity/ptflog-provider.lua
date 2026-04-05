@@ -28,6 +28,7 @@ data:extend({
     icon = "__Platform-logistics__/graphics/entity/ptflog-provider/provider-icon.png",
     flags = {"placeable-neutral", "player-creation","get-by-unit-number","not-rotatable"},
     minable = {mining_time = 0.1, result = "ptflog-provider"},
+    additional_pastable_entities = {"ptflog-requester","space-platform-hub"},
     max_health = 150,
     corpse = "arithmetic-combinator-remnants",
     dying_explosion = "arithmetic-combinator-explosion",

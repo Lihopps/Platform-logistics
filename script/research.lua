@@ -1,4 +1,4 @@
-local LPN_gui_manager=require("script.LPN_gui_manager")
+local LPN_gui_manager=require("script.gui.LPN_gui_manager")
 
 
 local function on_research_finished(e)

@@ -71,11 +71,34 @@ data:extend({
 })
 
 data.extend({
+  {
+    type = "item-subgroup",
+    name = "LPN-virtual-signal",
+    group = "signals",
+    order = "ea"
+  },
 {
     type = "virtual-signal",
-    name = "LPN-ship",
-    icon = "__Platform-logistics__/graphics/utility/ship-white.png",
-    subgroup = "pictographs",
-    order = "sjd[z]-[lpn-ship]"
+    name = "LPN-rocket_stack",
+    icon = "__Platform-logistics__/graphics/utility/rocket_stack.png",
+    subgroup = "LPN-virtual-signal",
+    order = "a"
+  },
+  {
+    type = "virtual-signal",
+    name = "LPN-priority",
+    icon = "__Platform-logistics__/graphics/utility/priority.png",
+    subgroup = "LPN-virtual-signal",
+    order = "b"
   },
 })
+
+local missing_platform = table.deepcopy(data.raw["fluid"]["water"])
+missing_platform.name="LPN-no-platform"
+missing_platform.icon = "__Platform-logistics__/graphics/utility/no-platform.png"
+missing_platform.icon_size = 64
+missing_platform.icon_mipmaps = 0
+missing_platform.hidden = true
+missing_platform.auto_barrel = false
+missing_platform.subgroup = "LPN-virtual-signal"
+data.extend({missing_platform})

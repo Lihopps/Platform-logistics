@@ -1,6 +1,9 @@
 AVANT RELEASE:
     ajout:
-        mettre a jour la version de flib
+        - migration from previous version (planet filter =>sub network)   
+        - threshold car pas trop logique , en fait si ?
+        - spoilage ?
+        - requester voir la request meme si ça vient ?
     graphics:
         
     parameter:
@@ -10,17 +13,19 @@ AVANT RELEASE:
     documentation:
         
     local:
+        
     
-        
-        
-
-
-
 
 PAS URGENT:
-     ? arrivée du pod (reversement image + declaration id )+replique sur toutes les planetes qui l'ont pas ( tout faire dans le final-update)
-    choix du bon provider (distance)
+    ajout:
+        - un heuristic pour la difficulte de la route ?
+        - amelioration manager
+        - integrer dans les missions les interrupter pour optimiser => j'ai l'impression que les interrupteur ce mette pas quan c'est es station temporaire
+
+    graphics:
+        - ajuste requester circuit connector
     
-    delete channel ?
-    sound of entity
-    sound of gui (ouvert/fermer)
+    GUI:
+        - add debug tab:
+            - visuel ddu storage, 
+            - bouton de reset toutes les reservation

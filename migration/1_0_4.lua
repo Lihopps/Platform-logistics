@@ -1,4 +1,4 @@
-local LPN_GUI_MANAGER= require("script.LPN_gui_manager")
+local LPN_GUI_MANAGER= require("script.gui.LPN_gui_manager")
 local v1_0_4={}
 
 

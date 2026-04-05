@@ -1,20 +1,24 @@
 local flib_migration = require("__flib__.migration")
 local v1_0_2 =require("migration.1_0_2")
 local v1_0_4 =require("migration.1_0_4")
+local v2_0_0 =require("migration.2_0_0")
 
 local by_version = {
-  ["1.1.0"]=function()
-    if not storage.ptflogfilter then
-      storage.ptflogfilter={}
-    end
+  ["1.0.2"] = function()
+    --reset all network si il y a des channels avec nouveau nom  : github#1
+    v1_0_2.change()
   end,
   ["1.0.4"] = function()
     --reset all provider/requester to be sure their exist properly in the network  : github#5
     v1_0_4.change()
   end,
-  ["1.0.2"] = function()
-    --reset all network si il y a des channels avec nouveau nom  : github#1
-    v1_0_2.change()
+   ["1.1.0"]=function()
+    if not storage.ptflogfilter then
+      storage.ptflogfilter={}
+    end
+  end,
+  ["2.0.0"]=function()
+    v2_0_0.change()
   end,
 }
 

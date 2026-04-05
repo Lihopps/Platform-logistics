@@ -8,6 +8,7 @@ end
 requester = table.deepcopy(data.raw["cargo-landing-pad"]["cargo-landing-pad"])
 requester.minable = { mining_time = 0.1, result = "ptflog-requester" }
 requester.name = "ptflog-requester"
+requester.additional_pastable_entities = {"ptflog-provider","space-platform-hub"}
 requester.flags = { "placeable-neutral", "player-creation", "get-by-unit-number" }
 requester.collision_box = { { -3.9, -3.9 }, { 3.9, 3.9 } }
 requester.selection_box = { { -4, -4 }, { 4, 4 } }
@@ -143,7 +144,7 @@ requester.circuit_connector ={
   points =
   {
     wire = { red = {-2.559, 1.059}, green = {-2.328, 1.223} },
-    shadow = { red = {-(2.559 + 1.5), 1.059 + 1.5}, green = {-(2.328 + 1.5), 1.223 + 1.5} } -- TODO: to be adjusted
+    shadow = { red = {-(2.559 + 1.5), 1.059 + 1.5}, green = {-(2.328 + 1.5), 1.223 + 1.5} }
   }
 }
 

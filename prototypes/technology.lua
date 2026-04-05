@@ -52,7 +52,7 @@ data:extend({
 	},
     order = "a-b-b"
 	},
-	{
+	--[[ {
     type = "technology",
     name = "LPN-landing-bonus",
     icon_size = 256,
@@ -89,5 +89,5 @@ data:extend({
 	max_level = "infinite",
     upgrade = true,
     order = "a-b-b"
-	}
+	} ]]
 })

@@ -1,7 +1,12 @@
 ---------------------------------------------------------------------------------------------------
-Version: 1.2.1
+Version: 2.0.0
 Date: ????
   Changes:
+    - Complete rework code to be more readdable
+    - Rebuild the LPN MANAGER GUI
+    - Rework how provider and requester interact with circuit network
+    - Add "priority" signal and "rocket stack" signal
+    - Remove LPN-landing-bonus technology
 ---------------------------------------------------------------------------------------------------
 Version: 1.2.0
 Date: 2025-08-16

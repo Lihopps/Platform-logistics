@@ -1,4 +1,4 @@
-lihop_debug=false
+lihop_debug=true
 
 if lihop_debug then
     for name, prototype in pairs(data.raw["space-connection"]) do
@@ -12,6 +12,13 @@ require("prototypes.entity.ptflog-requester")
 require("prototypes.technology")
 require("prototypes.utility-sprite")
 require("prototypes.tipsandtrick")
+require("prototypes.gui-style")
+
 
 table.insert(data.raw["space-platform-hub"]["space-platform-hub"].flags,"get-by-unit-number")
+if not data.raw["space-platform-hub"]["space-platform-hub"].additional_pastable_entities then
+    data.raw["space-platform-hub"]["space-platform-hub"].additional_pastable_entities={}
+end
+table.insert(data.raw["space-platform-hub"]["space-platform-hub"].additional_pastable_entities,"ptflog-requester")
+table.insert(data.raw["space-platform-hub"]["space-platform-hub"].additional_pastable_entities,"ptflog-provider")
 
