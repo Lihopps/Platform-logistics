@@ -169,8 +169,10 @@ end
 function util.itemqal_in_filters(itemqal,filters)
     if not itemqal then return true end
     for i,filter in ipairs(filters) do
-        if (filter.value.name.."_"..(filter.value.quality or "normal"))==itemqal and filter.min>0 then
-            return true
+        if next(filter) then
+            if (filter.value.name.."_"..(filter.value.quality or "normal"))==itemqal and filter.min>0 then
+                return true
+            end
         end
     end
     return false

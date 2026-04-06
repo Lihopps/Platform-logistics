@@ -64,6 +64,13 @@ data:extend(
       minimum_value = 1,
       order="h"
     },
+    { 
+      type = "bool-setting",
+      name = "LPN-show-debug-tab",
+      setting_type = "runtime-global",
+      default_value = false,
+      order="i"
+    },
   })
 
 -------------------------------------------------------------------------------------------------------------------------

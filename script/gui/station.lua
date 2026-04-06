@@ -213,7 +213,7 @@ function station_gui.update_platform_tab(player, item_filter, network, sub_netwo
         end
 
 
-
+        local planet = {"?",{ "", "[space-location=" .. station.location.name .. "]", "  ", { "space-location-name." .. station.location.name } },""}
 
         if not network or (network == station.network and util.has_common_bits_from_string_32(sub_network, station.sub_network)) then
             local color = idx % 2 == 0 and "light" or "dark"
@@ -245,6 +245,7 @@ function station_gui.update_platform_tab(player, item_filter, network, sub_netwo
                             style_mods = { vertical_align = "center", horizontal_align = "center" },
                             { type = "label", style = "LPN_station_camera_label",      caption = id },
                             { type = "label", style = "LPN_station_camera_label_type", caption = labeltype },
+                            { type = "label", style = "LPN_station_camera_planet", caption = planet },
                             {
                                 type = "button",
                                 style = "LPN_station_camera_button",

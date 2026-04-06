@@ -64,18 +64,21 @@ function dispatcher.create_delivery(platform, provider, request)
     local amount = platform_manager.reel_item_amount(platform,request)
     
     
-    reservation.reserve_supply(provider.node.id, amount,request.item)
+   local path={}
     reservation.reserve_request(request.node.id, amount,request.item)
-
+    local not_provider=false
+    if provider then
     --get mission path by A* (return list of spacelocation)
     --local path={provider.node.location.planet,request.node.location.planet}
     --local path=util.name_to_planet(routing.a_star(provider.node.location.planet.name,request.node.location.planet.name))
-    local path=util.name_to_planet(routing.a_star_multi_waypoints(
+        path=util.name_to_planet(routing.a_star_multi_waypoints(
         {game.planets[platform.entity.surface.platform.last_visited_space_location.name].name,provider.node.location.planet.name,
-        request.node.location.planet.name}
-        )
-        )
-    
+        request.node.location.planet.name}))
+        reservation.reserve_supply(provider.node.id, amount,request.item)
+    else
+        not_provider=true
+        path=util.name_to_planet(routing.a_star_multi_waypoints({game.planets[platform.entity.surface.platform.last_visited_space_location.name].name,request.node.location.planet.name}))
+    end
     --si le depart et le premier prov c'est le meme on enleve le premier pour eviter le décalage du mission_index
     local starting=false
     if #path>=2 then
@@ -100,6 +103,7 @@ function dispatcher.create_delivery(platform, provider, request)
             goto continue
         end
         -- provider requester none 
+        if not provider then provider={node={location={index=-1}}} end
         if planet.surface.index==provider.node.location.index then
             table.insert(platform.mission,
                 {[planet.surface.index]={
@@ -128,7 +132,7 @@ function dispatcher.create_delivery(platform, provider, request)
         ::continue::
     end
     platform.state = "TRAVELING"
-    platform_manager.update_platform_schedule(platform,true)
+    platform_manager.update_platform_schedule(platform,true,not_provider)
 
 end
 

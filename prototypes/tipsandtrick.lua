@@ -13,7 +13,7 @@ data:extend({
 	{
 		type = "tips-and-tricks-item-category",
 		name = "LPN",
-		order = "l-[space-age]-[LPN]",
+		order = "n-[space-age]-[LPN]",
 	},
 	{
 		type = "tips-and-tricks-item",

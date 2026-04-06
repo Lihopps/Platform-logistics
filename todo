@@ -4,6 +4,7 @@ AVANT RELEASE:
         - threshold car pas trop logique , en fait si ?
         - spoilage ?
         - requester voir la request meme si ça vient ?
+        
     graphics:
         
     parameter:
@@ -29,3 +30,4 @@ PAS URGENT:
         - add debug tab:
             - visuel ddu storage, 
             - bouton de reset toutes les reservation
+            - bouton de reset de tout le system

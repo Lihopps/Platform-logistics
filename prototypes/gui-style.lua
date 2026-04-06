@@ -60,6 +60,16 @@ styles.LPN_station_camera_label = {
 	right_padding = 4,
 }
 
+styles.LPN_station_camera_planet = {
+	type = "label_style",
+	font = "default-game",
+	font_color = default_font_color,
+	size = 225,
+	vertical_align = "top",
+	horizontal_align = "left",
+	right_padding = 4,
+}
+
 styles.LPN_station_camera_label_type = {
 	type = "label_style",
 	font = "default-game",

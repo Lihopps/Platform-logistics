@@ -2,115 +2,11 @@ local LPN_GUI_MANAGER = require("script.gui.LPN_gui_manager")
 local dispatcher = require("script.dispatcher")
 local reservation_manager = require("script.reservation_manager")
 local util = require("script.util")
+local debug = require("script.debug")
 local v2_0_0 = {}
 local alpha = { "A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U",
     "V", "W", "X", "Y", "Z" }
 
-
-local function create_mission_from_schedule(channel_name, platform_unit_number, schedule)
-    local mission = {}
-    local records = schedule.get_records()
-    local hub = game.get_entity_by_unit_number(platform_unit_number)
-    local provitems = {}
-
-    local section_name = "LPN : Platform n°: " .. hub.surface.index
-    local section_index = util.get_logistic_section_by_name(hub, section_name)
-    local filters = hub.get_logistic_sections().get_section(section_index).filters
-    for _, filter in pairs(filters) do
-        local surface_index = game.planets[filter.import_from.name].surface.index
-        if not provitems[surface_index] then provitems[surface_index] = {} end
-        provitems[surface_index][filter.value.name .. "_" .. (filter.value.quality or "normal")] = filter.min
-    end
-
-
-    for i, record in ipairs(records) do
-        local surface = game.planets[record.station].surface
-        local type = { none = true }
-        for _, wait in pairs(record.wait_conditions) do
-            if wait.type == "all_requests_satisfied" then
-                local providers = surface.find_entities_filtered { name = "ptflog-provider" }
-                if next(providers) then
-                    for _, provider in pairs(providers) do
-                        local prov = storage.old_storage.ptflogchannel[channel_name].building["ptflog-provider"]
-                            [provider.unit_number]
-                        if prov then
-                            for itemqal, data in pairs(prov["reserved"]) do
-                                if provitems[provider.surface.index][itemqal] then
-                                    type["provider"] = provider.unit_number
-                                    goto continue_req
-                                end
-                            end
-                        end
-                    end
-                end
-            end
-        end
-        ::continue_req::
-
-        local req_item = {}
-        local requesters = surface.find_entities_filtered { name = "ptflog-requester" }
-        if next(requesters) then
-            for _, requester in pairs(requesters) do
-                local req = storage.old_storage.ptflogchannel[channel_name].building["ptflog-requester"]
-                    [requester.unit_number]
-                if req then
-                    for itemqal, data in pairs(req["incomming"]) do
-                        for id, _ in pairs(data.platform) do
-                            if id == platform_unit_number then
-                                req_item[itemqal] = (req_item[itemqal] or 0) + data.quantity
-                                type["requester"] = requester.unit_number
-                                goto continue
-                            end
-                        end
-                    end
-                end
-            end
-        end
-        ::continue::
-
-        local stations = {}
-        for typ, unit in pairs(type) do
-            if typ == "none" then
-                table.insert(stations, {
-                    station = { id = -1, location = { planet = game.planets[record.station] } },
-                    type = "none"
-                })
-            elseif typ == "provider" then
-                local entity = game.get_entity_by_unit_number(unit)
-                table.insert(stations, {
-                    type = "provider",
-                    station = storage.supply_nodes[unit],
-                    item = provitems[entity.surface.index]
-
-                })
-            elseif typ == "requester" then
-                local entity = game.get_entity_by_unit_number(unit)
-                table.insert(stations, {
-                    type = "requester",
-                    station = storage.request_nodes[unit],
-                    item = req_item --peut etre bug ici
-
-                })
-            end
-        end
-        table.insert(mission, { [surface.index] = stations })
-    end
-    return mission
-end
-
-
-local function create_requests(item)
-    --[[ req = {
-        node = node,
-        item = filter.value.name .. "_" .. filter.value.quality,
-        amount = needed,
-        priority = 1,
-        destination = node.location,
-        priority = parameter.priority
-    } ]]
-
-   
-end
 
 local function update_delivery(channel_name, platform_unit_number, platform)
     --pour chaque platform on recreer la request puis on la réaffect via dispatcher
@@ -124,10 +20,12 @@ local function update_delivery(channel_name, platform_unit_number, platform)
     local section_index = util.get_logistic_section_by_name(hub, section_name)
     local filters = hub.get_logistic_sections().get_section(section_index).filters
     for _, filter in pairs(filters) do
-        if filter.min>0 then
-            local surface_index = game.planets[filter.import_from.name].surface.index
-            if not provitems[surface_index] then provitems[surface_index] = {} end
-            provitems[surface_index][filter.value.name .. "_" .. (filter.value.quality or "normal")] = filter.min
+        if next(filter) then
+            if filter.min>0 then
+                local surface_index = game.planets[filter.import_from.name].surface.index
+                if not provitems[surface_index] then provitems[surface_index] = {} end
+                provitems[surface_index][filter.value.name .. "_" .. (filter.value.quality or "normal")] = filter.min
+            end
         end
     end
 
@@ -147,12 +45,13 @@ local function update_delivery(channel_name, platform_unit_number, platform)
                                 if provitems[provider.surface.index][itemqal] then
                                     if not items[itemqal] then items[itemqal]={} end
                                     items[itemqal]["provider"]={node=storage.supply_nodes[provider.unit_number]}
-                                    goto continue_req
+                                    
                                 end
                             end
                         end
                     end
                 end
+                goto continue_req
             end
         end
         ::continue_req::
@@ -186,13 +85,17 @@ local function update_delivery(channel_name, platform_unit_number, platform)
 
     local first=true
     for itemqal, item_data in pairs(items) do
-        if first then
-            dispatcher.create_delivery(storage.platforms[platform.hub.unit_number],item_data["provider"],item_data["request"])
-            first=false
+        if item_data["request"] then
+            if first then
+                dispatcher.create_delivery(storage.platforms[platform.hub.unit_number],item_data["provider"],item_data["request"])
+                first=false
+            else
+                local p_loc=item_data["provider"].node.location.index
+                local r_loc=item_data["request"].destination.index
+                dispatcher.update_delivery({storage.platforms[platform.hub.unit_number],p_loc,r_loc},item_data["provider"],item_data["request"])
+            end
         else
-            local p_loc=item_data["provider"].node.location.index
-            local r_loc=item_data["request"].destination.index
-            dispatcher.update_delivery({storage.platforms[platform.hub.unit_number],p_loc,r_loc},item_data["provider"],item_data["request"])
+            game.print("not requested")
         end
     end
 end
@@ -287,6 +190,7 @@ function v2_0_0.change()
 
     settings.global["LPN-enable-dispatcher"] = { value = false }
     
+    debug.controls_system(false)
 
     --dispatcher.update() -- idle_platforms, request, supplies
     --dispatcher.dispatch()

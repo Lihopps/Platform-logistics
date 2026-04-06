@@ -1,4 +1,3 @@
-local LPN_GUI_MANAGER= require("script.gui.LPN_gui_manager")
 local v1_0_4={}
 
 
@@ -13,7 +12,7 @@ function v1_0_4.change()
             end
         end
     end
-    LPN_GUI_MANAGER.rebuild()
+    remote.call("LPN_remote","rebuild")
 end
 
 return v1_0_4

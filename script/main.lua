@@ -8,7 +8,8 @@ local MANAGER_GUI_INTERVAL = settings.global["LPN-manager-update"].value
 
 
 local main={}
-local update=false
+local update=true
+local connection=true
 function main.on_init()
     if not storage.platforms then storage.platforms = {} end
     if not storage.idle_platforms then storage.idle_platforms = {}   end
@@ -46,6 +47,14 @@ local function on_tick(event)
     if (event.tick+60) % MANAGER_GUI_INTERVAL == 0 then
         LPN_gui_manager.updateP()
     end
+
+    if connection then
+        connection=false
+        if not settings.global["LPN-enable-dispatcher"].value then
+            game.print({"",{"alert.dispatcher-disable"},{"alert.dispatcher-disable-tooltip"}})
+        end
+    end
+
 end
 
 

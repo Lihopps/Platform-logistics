@@ -45,7 +45,7 @@ end
 
 --- release supply reservation
 ---@param station_data any a node
----@param item string item name
+---@param item string itemqal name
 ---@param amount number quantity
 function reservation.release_supply(station_data,item,amount)
     local res=storage.reservations[station_data.station.id]
@@ -57,7 +57,7 @@ end
 
 --- release request supply reservation
 ---@param station_data any a node
----@param item string item name
+---@param item string itemqal name
 ---@param amount number quantity
 function reservation.release_request_supply(station_data,item,amount)
     local unit_number=station_data.station.unit_number or station_data.station.id

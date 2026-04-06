@@ -3,9 +3,10 @@ local gui = require("__flib__.gui")
 local util = require("script.util")
 local blueprint = require("script.blueprint")
 local gui_util = require("script.gui.gui-util")
-local inventory_tab=require("script.gui.inventory")
-local platform_tab=require("script.gui.platform")
-local station_tab=require("script.gui.station")
+local inventory_tab = require("script.gui.inventory")
+local platform_tab = require("script.gui.platform")
+local station_tab = require("script.gui.station")
+local debug_tab=require("script.gui.debug")
 
 
 local margin = 3
@@ -18,20 +19,50 @@ local function value_from_element(element)
     return element.elem_value.name .. "_" .. (element.elem_value.quality or "normal")
 end
 
-local function update_gui(player,trigger)
+local function update_gui(player, trigger)
     local parameter = player.gui.screen["LPN-manager-gui"].children[2].children[1]
     local item_filter = value_from_element(parameter.children[2])
+    local alert_label = parameter.children[9]
     local network = value_from_element(parameter.children[5])
     local sub_network = parameter.children[7].text
     local selected_tab_index = player.gui.screen["LPN-manager-gui"].children[2].children[2].selected_tab_index or 1
-    if selected_tab_index == 1 then --inventory tab
+    if selected_tab_index == 1 then     --inventory tab
         inventory_tab.update_inventory_tab(player, item_filter, network, sub_network, selected_tab_index)
-    elseif selected_tab_index == 2 then--platform_tab
-        platform_tab.update_platform_tab(player,item_filter,network,sub_network,selected_tab_index,trigger)
-    elseif selected_tab_index == 3 then--station_tab
-        station_tab.update_platform_tab(player,item_filter,network,sub_network,selected_tab_index,trigger)
-   
+    elseif selected_tab_index == 2 then --platform_tab
+        platform_tab.update_platform_tab(player, item_filter, network, sub_network, selected_tab_index, trigger)
+    elseif selected_tab_index == 3 then --station_tab
+        station_tab.update_platform_tab(player, item_filter, network, sub_network, selected_tab_index, trigger)
+    elseif selected_tab_index == 4 and settings.global["LPN-show-debug-tab"].value then --debug_tab
+        debug_tab.update_debug_tab(player, item_filter, network, sub_network, selected_tab_index, trigger)
+    elseif selected_tab_index == 4 and not settings.global["LPN-show-debug-tab"].value then 
+        player.gui.screen["LPN-manager-gui"].children[2].children[2].selected_tab_index=1
+        --remote.call("LPN_remote","update_tab",player)
     end
+
+
+    alert_label.caption = { "alert.no-alert" }
+    alert_label.tooltip = nil
+    if not settings.global["LPN-enable-dispatcher"].value then
+        alert_label.caption = { "alert.dispatcher-disable" }
+        alert_label.tooltip = { "alert.dispatcher-disable-tooltip" }
+    else
+        local alerts = player.get_alerts { type = defines.alert_type.custom, prototype = "ptflog-requester" }
+        if alerts then
+            for _, arr in pairs(alerts) do
+                for id, alert in pairs(arr) do
+                    if alert and next(alert) then
+                        for _, data in pairs(alert) do
+                            if data.target.name == "ptflog-requester" then
+                                alert_label.caption = data.message
+                                goto continue
+                            end
+                        end
+                    end
+                end
+            end
+        end
+    end
+    ::continue::
 end
 
 local function toogle_visibility(e)
@@ -88,8 +119,8 @@ end
 
 local function update_trigger(e)
     local player = game.players[e.element.player_index]
-    if not player then 
-        return 
+    if not player then
+        return
     end
     update_gui(player)
 end
@@ -97,7 +128,7 @@ end
 local function on_platform_sort_checkbox_changed(e)
     local player = game.players[e.element.player_index]
     if not player then return end
-   
+
     update_gui(player, e.element.tags.trigger)
 end
 
@@ -130,7 +161,7 @@ local function parameter(player)
             {
                 type = "choose-elem-button",
                 elem_type = "signal",
-                tooltip={"gui.LPN-network-tooltip"},
+                tooltip = { "gui.LPN-network-tooltip" },
                 handler = { [defines.events.on_gui_elem_changed] = update_trigger },
             },
             {
@@ -144,6 +175,15 @@ local function parameter(player)
                 allow_decimal = false,
                 allow_negative = false,
                 lose_focus_on_confirm = true,
+            },
+            {
+                type = "label",
+                caption = { "gui.alert" },
+                style = "heading_2_label",
+            },
+            {
+                type = "label",
+                caption = "",
             },
 
         }
@@ -234,19 +274,21 @@ local function tabbed_pane(player)
                                     style = "LPN_table_toolbar_frame",
                                     direction = "horizontal",
                                     children = {
-                                        gui_util.sort_checkbox(90,{ "platforms" },true,nil,on_platform_sort_checkbox_changed,"id"),
-                                        gui_util.sort_checkbox(100,{"gui.network"},true,nil,on_platform_sort_checkbox_changed,"network"),
+                                        gui_util.sort_checkbox(90, { "platforms" }, true, nil,
+                                            on_platform_sort_checkbox_changed, "id"),
+                                        gui_util.sort_checkbox(100, { "gui.network" }, true, nil,
+                                            on_platform_sort_checkbox_changed, "network"),
                                         {
-                                            type="label",
-                                            caption={"gui.position"},
-                                            style="heading_2_label",
-                                            style_mods={width=525}
+                                            type = "label",
+                                            caption = { "gui.position" },
+                                            style = "heading_2_label",
+                                            style_mods = { width = 525 }
                                         }
-                                        ,{
-                                            type="label",
-                                            caption={"gui.shipment"},
-                                            style="heading_2_label"
-                                        }
+                                        , {
+                                        type = "label",
+                                        caption = { "gui.shipment" },
+                                        style = "heading_2_label"
+                                    }
 
                                     }
                                 },
@@ -262,7 +304,7 @@ local function tabbed_pane(player)
                     }
                 },
             },
-             {
+            {
                 tab = {
                     type = "tab",
                     caption = { "gui.stations" },
@@ -283,25 +325,27 @@ local function tabbed_pane(player)
                                     style = "LPN_table_toolbar_frame",
                                     direction = "horizontal",
                                     children = {
-                                        gui_util.sort_checkbox(230,{ "gui.stations" },true,nil,on_platform_sort_checkbox_changed,"id"),
-                                        gui_util.sort_checkbox(100,{"gui.network"},true,nil,on_platform_sort_checkbox_changed,"network"),
+                                        gui_util.sort_checkbox(230, { "gui.stations" }, true, nil,
+                                            on_platform_sort_checkbox_changed, "id"),
+                                        gui_util.sort_checkbox(100, { "gui.network" }, true, nil,
+                                            on_platform_sort_checkbox_changed, "network"),
                                         {
-                                            type="label",
-                                            caption={"gui.provided-requested"},
-                                            style="heading_2_label",
-                                            style_mods={width=250}
+                                            type = "label",
+                                            caption = { "gui.provided-requested" },
+                                            style = "heading_2_label",
+                                            style_mods = { width = 250 }
                                         }
-                                        ,{
-                                            type="label",
-                                            caption={"gui.shipment"},
-                                            style="heading_2_label",
-                                            style_mods={width=250}
-                                        },
+                                        , {
+                                        type = "label",
+                                        caption = { "gui.shipment" },
+                                        style = "heading_2_label",
+                                        style_mods = { width = 250 }
+                                    },
                                         {
-                                            type="label",
-                                            caption={"gui.control"},
-                                            style="heading_2_label",
-                                            style_mods={width=250}
+                                            type = "label",
+                                            caption = { "gui.control" },
+                                            style = "heading_2_label",
+                                            style_mods = { width = 250 }
                                         }
                                     }
                                 },
@@ -404,6 +448,9 @@ function LPN_gui_manager.rebuild()
             create_lpn_manager_gui(player)
         end
     end
+    if settings.global["LPN-show-debug-tab"].value then
+        debug_tab.create_content_tab()
+    end
     game.print("LOGISTIC PLANET NETWORK : LPN GUI MANAGER REBUILT")
 end
 
@@ -441,24 +488,40 @@ function LPN_gui_manager.updateP()
     end
 end
 
+local function on_runtime_mod_setting_changed(e)
+    if e.setting_type=="runtime-global" then
+        if e.setting=="LPN-show-debug-tab" then
+            if settings.global["LPN-show-debug-tab"].value then
+                debug_tab.create_content_tab()
+            else
+                debug_tab.remove()
+            end
+            LPN_gui_manager.updateP()
+        end
+    end
+end
 
 LPN_gui_manager.events = {
     [defines.events.on_gui_closed] = on_gui_closed,
     [defines.events.on_lua_shortcut] = toogle_visibility_short,
-    ["toggle-LPN-MANAGER"] = toogle_visibility_short
+    ["toggle-LPN-MANAGER"] = toogle_visibility_short,
+    [defines.events.on_runtime_mod_setting_changed]=on_runtime_mod_setting_changed
 }
 
 gui.add_handlers({
     toogle_visibility = toogle_visibility,
     give_book = give_book,
     update_trigger = update_trigger,
-    on_platform_sort_checkbox_changed=on_platform_sort_checkbox_changed
+    on_platform_sort_checkbox_changed = on_platform_sort_checkbox_changed
 })
 
 if not remote.interfaces["LPN_remote"] then
     remote.add_interface("LPN_remote",
-    {
-        update_tab = function(player) update_gui(player) end,
-    })
+        {
+            update_tab = function(player) update_gui(player) end,
+        },
+        {
+            rebuild = function() LPN_gui_manager.rebuild() end,
+        })
 end
 return LPN_gui_manager

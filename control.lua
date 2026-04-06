@@ -16,8 +16,9 @@ handler.add_libraries({
 	require("script.cargo-pod"),
 	require("script.gui.inventory"),
 	require("script.gui.platform"),
+    require("script.gui.debug"),
 
-	require("script.not_use.debug")
+	require("script.debug")
 	
 })
 
