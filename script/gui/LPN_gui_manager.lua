@@ -7,6 +7,7 @@ local inventory_tab = require("script.gui.inventory")
 local platform_tab = require("script.gui.platform")
 local station_tab = require("script.gui.station")
 local debug_tab=require("script.gui.debug")
+local migration_gui = require("migration.migration-gui")
 
 
 local margin = 3
@@ -106,6 +107,12 @@ local function toogle_visibility_short(e)
     end
 end
 
+local function open_migration(e)
+     local player = game.players[e.player_index]
+     if not player then return end
+     local version=storage.version
+     migration_gui.create_gui(player,version)
+end
 
 local function give_book(e)
     local player = game.players[e.player_index]
@@ -404,6 +411,14 @@ local function create_lpn_manager_gui(player)
                         {
                             type = "sprite-button",
                             style = "frame_action_button",
+                            sprite = "LPN-migration-version",
+                            name = "LPN-show-migration_gui",
+                            tooltip = { "gui.migration_tooltip" },
+                            handler = { [defines.events.on_gui_click] = open_migration },
+                        },
+                        {
+                            type = "sprite-button",
+                            style = "frame_action_button",
                             sprite = "LPN-book",
                             name = "LPN-button_give_book",
                             tooltip = { "gui.book" },
@@ -510,6 +525,7 @@ LPN_gui_manager.events = {
 
 gui.add_handlers({
     toogle_visibility = toogle_visibility,
+    open_migration=open_migration,
     give_book = give_book,
     update_trigger = update_trigger,
     on_platform_sort_checkbox_changed = on_platform_sort_checkbox_changed

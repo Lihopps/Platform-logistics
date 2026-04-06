@@ -7,6 +7,7 @@ local function on_gui_closed(e)
     if not player then return end
     local refs = player.opened or e.element or nil
     if not refs then return end
+    if refs.valid==false then return end
     if refs.object_name == "LuaGuiElement" then
         if refs.name == "provider_channel" then
             refs.destroy()

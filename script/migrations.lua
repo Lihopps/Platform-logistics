@@ -19,6 +19,7 @@ local by_version = {
   end,
   ["2.0.0"]=function()
     v2_0_0.change()
+    storage.version="2_0_0"
   end,
 }
 

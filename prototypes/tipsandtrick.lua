@@ -17,7 +17,7 @@ data:extend({
 	},
 	{
 		type = "tips-and-tricks-item",
-		name = "LPN-title",
+		name = "LPN-title_2",
 		localised_description={"tips-and-tricks-item-description.LPN-title"},
 		category = "LPN",
 		order = "0",
@@ -33,7 +33,7 @@ data:extend({
 	},
 	 {
 		type = "tips-and-tricks-item",
-		name = "LPN-tat-provider",
+		name = "LPN-tat-provider_2",
 		localised_description={"tips-and-tricks-item-description.LPN-tat-provider"},
 		category = "LPN",
 		order = "0a",
@@ -51,7 +51,7 @@ data:extend({
 	},
 	{
 		type = "tips-and-tricks-item",
-		name = "LPN-tat-requester",
+		name = "LPN-tat-requester_2",
 		localised_description={"tips-and-tricks-item-description.LPN-tat-requester"},
 		category = "LPN",
 		order = "0b",
@@ -69,7 +69,7 @@ data:extend({
 	},
      {
 		type = "tips-and-tricks-item",
-		name = "LPN-tat-1",
+		name = "LPN-tat-1_2",
 		localised_description={"tips-and-tricks-item-description.LPN-tat-1"},
 		category = "LPN",
 		order = "1",
@@ -87,7 +87,7 @@ data:extend({
 	},
     {
 		type = "tips-and-tricks-item",
-		name = "LPN-tat-2",
+		name = "LPN-tat-2_2",
 		localised_description={"tips-and-tricks-item-description.LPN-tat-2"},
 		category = "LPN",
 		order = "2",
@@ -105,7 +105,7 @@ data:extend({
 	},
     {
 		type = "tips-and-tricks-item",
-		name = "LPN-tat-3",
+		name = "LPN-tat-3_2",
 		localised_description={"tips-and-tricks-item-description.LPN-tat-3"},
 		category = "LPN",
 		order = "3",

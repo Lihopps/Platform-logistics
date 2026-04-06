@@ -17,6 +17,7 @@ handler.add_libraries({
 	require("script.gui.inventory"),
 	require("script.gui.platform"),
     require("script.gui.debug"),
+	require("migration.migration-gui"),
 
 	require("script.debug")
 	

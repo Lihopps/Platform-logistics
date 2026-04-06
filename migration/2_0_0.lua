@@ -3,6 +3,8 @@ local dispatcher = require("script.dispatcher")
 local reservation_manager = require("script.reservation_manager")
 local util = require("script.util")
 local debug = require("script.debug")
+local migration_gui = require("migration.migration-gui")
+
 local v2_0_0 = {}
 local alpha = { "A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U",
     "V", "W", "X", "Y", "Z" }
@@ -199,6 +201,10 @@ function v2_0_0.change()
     game.print({ "alert.update-2-0-0_2" })
     --game.tick_paused = true
     --on coupe le dispatcher ?
+
+    for _,player in pairs(game.players) do
+        migration_gui.create_gui(player,"2_0_0")
+    end
 end
 
 return v2_0_0
