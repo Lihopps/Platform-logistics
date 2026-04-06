@@ -1,4 +1,4 @@
-lihop_debug=true
+lihop_debug=false
 
 if lihop_debug then
     for name, prototype in pairs(data.raw["space-connection"]) do

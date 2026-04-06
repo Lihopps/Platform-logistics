@@ -8,7 +8,7 @@ local MANAGER_GUI_INTERVAL = settings.global["LPN-manager-update"].value
 
 
 local main={}
-local update=true
+local update=false
 local connection=true
 function main.on_init()
     if not storage.platforms then storage.platforms = {} end
