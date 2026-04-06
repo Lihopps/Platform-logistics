@@ -519,8 +519,6 @@ if not remote.interfaces["LPN_remote"] then
     remote.add_interface("LPN_remote",
         {
             update_tab = function(player) update_gui(player) end,
-        },
-        {
             rebuild = function() LPN_gui_manager.rebuild() end,
         })
 end
