@@ -190,7 +190,7 @@ function v2_0_0.change()
 
     settings.global["LPN-enable-dispatcher"] = { value = false }
     
-    debug.controls_system(false)
+    debug.control_system(false)
 
     --dispatcher.update() -- idle_platforms, request, supplies
     --dispatcher.dispatch()
