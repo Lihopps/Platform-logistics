@@ -6,7 +6,7 @@ local function on_gui_migration_closed(e)
     local element = e.element
     if element and element.valid then
         if (element.name == "LPN-migration-gui" and element.visible) or element.name=="LPN-migration-button_close" then
-            game.players[e.player_index].opened = nil
+            --game.players[e.player_index].opened = nil
             game.players[e.player_index].gui.screen["LPN-migration-gui"].destroy()
         end
     end

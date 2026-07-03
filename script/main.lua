@@ -27,6 +27,10 @@ function main.on_init()
 end
 
 function main.on_configuration_changed(e)
+    local old_version = e.mod_changes[script.mod_name] and e.mod_changes[script.mod_name].old_version
+    if not old_version then
+        return
+    end
     for version, migration in pairs(migrations) do
         if helpers.compare_versions(version, old_version) > 0 then
             migration()

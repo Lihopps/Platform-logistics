@@ -110,7 +110,7 @@ end
 local function open_migration(e)
      local player = game.players[e.player_index]
      if not player then return end
-     local version=storage.version
+     local version=storage.version or "2_0_0"
      migration_gui.create_gui(player,version)
 end
 
