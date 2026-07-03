@@ -123,8 +123,8 @@ requester.cargo_station_parameters.giga_hatch_definitions[1].hatch_graphics_fron
       })
   }
 }
-requester.robot_landing_location_offset = { 2.1, -2.8 }
-requester.robot_animation = util.sprite_load(
+requester.robot_door.robot_landing_location_offset = { 2.1, -2.8 }
+requester.robot_door.robot_animation = util.sprite_load(
   "__Platform-logistics__/graphics/entity/ptflog-requester/planet-hub-drone-hatch",
   {
     frame_count = 7,

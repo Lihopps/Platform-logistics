@@ -11,7 +11,7 @@ local dispatcher = {}
 local MAX_ASSIGNMENTS = settings.global["LPN-dispatcher-assign-per-cycle"].value
 
 function dispatcher.update()
-   
+    
     platform_manager.update_platforms()
     request_manager.update_requests()
     --if next(storage.requests) then

@@ -27,7 +27,11 @@ function main.on_init()
 end
 
 function main.on_configuration_changed(e)
-    migrations.on_configuration_changed(e)
+    for version, migration in pairs(migrations) do
+        if helpers.compare_versions(version, old_version) > 0 then
+            migration()
+        end
+    end
     LPN_gui_manager.rebuild()
 end
 
